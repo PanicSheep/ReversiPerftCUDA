@@ -1,9 +1,6 @@
 #pragma once
 #include "MacrosHell.h"
-#include <algorithm>
 #include <cstdint>
-#include <string>
-#include <vector>
 
 enum Field : uint8_t
 {
@@ -26,31 +23,24 @@ class CMoves
 	uint64_t m_moves{0};
 public:
 	CMoves() noexcept = default;
-	CMoves(uint64_t moves) noexcept : m_moves(moves) {}
-
+	CUDA_CALLABLE CMoves(uint64_t moves) noexcept : m_moves(moves) {}
+	CUDA_CALLABLE uint64_t Get() const { return m_moves; }
 	bool operator==(const CMoves& o) const noexcept { return m_moves == o.m_moves; }
-
-	std::size_t size() const noexcept { return PopCount(m_moves); }
-	bool empty() const noexcept { return m_moves == 0; }
-	void clear() noexcept { m_moves = 0; }
-
-	bool HasMove(CMove) const noexcept;
-	CMove PeekMove() const noexcept;
-	CMove ExtractMove() noexcept;
-
-	void Remove(CMove) noexcept;
-	void Remove(uint64_t moves) noexcept;
-	void Filter(uint64_t moves) noexcept;
+	
+	CUDA_CALLABLE std::size_t size() const noexcept { return PopCount(m_moves); }
+	CUDA_CALLABLE bool empty() const noexcept { return m_moves == 0; }
+	CUDA_CALLABLE void clear() noexcept { m_moves = 0; }
+	
+	CUDA_CALLABLE bool HasMove(CMove) const noexcept;
+	CUDA_CALLABLE CMove PeekMove() const noexcept;
+	CUDA_CALLABLE CMove ExtractMove() noexcept
+	{
+		const auto LSB = static_cast<CMove>(BitScanLSB(m_moves));
+		RemoveLSB(m_moves);
+		return LSB;
+	}
+	
+	CUDA_CALLABLE void Remove(CMove) noexcept;
+	CUDA_CALLABLE void Remove(uint64_t moves) noexcept;
+	CUDA_CALLABLE void Filter(uint64_t moves) noexcept;
 };
-
-class CBestMoves
-{
-public: // TODO: Make sure if there's an AV, there's a PV.
-	CMove PV = CMove::invalid; // TODO: Rename to first.
-	CMove AV = CMove::invalid; // TODO: Rename to second.
-
-	CBestMoves() = default;
-	CBestMoves(CMove PV, CMove AV) : PV(PV), AV(AV) {}
-};
-
-CBestMoves Merge(CBestMoves, int8_t depth1, uint8_t selectivity1, CBestMoves, int8_t depth2, uint8_t selectivity2);

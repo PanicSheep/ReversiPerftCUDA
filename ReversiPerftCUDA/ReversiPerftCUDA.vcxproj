@@ -20,7 +20,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -59,6 +59,7 @@
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
+      <CodeGeneration>compute_60,sm_60</CodeGeneration>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -68,7 +69,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <OpenMPSupport>true</OpenMPSupport>
+      <OpenMPSupport>false</OpenMPSupport>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
@@ -87,6 +88,7 @@
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
+      <CodeGeneration>compute_60,sm_60</CodeGeneration>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -96,7 +98,7 @@
     <ClCompile Include="FlipFast.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Moves.cpp" />
-    <ClCompile Include="Perft_basic.cpp" />
+    <ClCompile Include="Perft.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
@@ -104,9 +106,10 @@
     <ClInclude Include="FlipFast.h" />
     <ClInclude Include="Hashtable.h" />
     <ClInclude Include="HashtablePerft.h" />
+    <ClInclude Include="kernel.cuh" />
     <ClInclude Include="MacrosHell.h" />
     <ClInclude Include="Moves.h" />
-    <ClInclude Include="Perft_basic.h" />
+    <ClInclude Include="Perft.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>

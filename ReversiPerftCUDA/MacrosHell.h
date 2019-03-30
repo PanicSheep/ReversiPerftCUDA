@@ -3,6 +3,18 @@
 #include <cstdint>
 #include <string>
 
+// Predefined macros hell:
+//
+// __GNUC__           Compiler is gcc, clang or Intel on Linux.
+// __INTEL_COMPILER   Compiler is Intel.
+// _MSC_VER           Compiler is MSVC or Intel on Windows.
+// _WIN32             Building on Windows (any).
+// _WIN64             Building on Windows 64 bit.
+// _M_X64             Microsoft specific macro for 64 bit based machines.
+// __x86_64           Defined by GNU C and Sun Studio for 64 bit based machines.
+// __NVCC__           Defined when compiling C / C++ / CUDA source files.
+// __CUDACC__         Defined when compiling CUDA source files.
+
 #if !(defined(_M_X64) || defined(__x86_64))
 	#error "This code only works on x64!"
 #endif
@@ -13,19 +25,13 @@
 	#pragma intrinsic(_BitScanReverse64)
 #elif defined(__GNUC__)
 	#include <x86intrin.h>
+#elif defined(__CUDA_ARCH__)
+	#include "device_launch_parameters.h"
+	#include "cuda_runtime.h"
 #else
 	#error compiler not supported
 #endif
 
-// Predefined macros hell:
-//
-// __GNUC__           Compiler is gcc, clang or Intel on Linux.
-// __INTEL_COMPILER   Compiler is Intel.
-// _MSC_VER           Compiler is MSVC or Intel on Windows.
-// _WIN32             Building on Windows (any).
-// _WIN64             Building on Windows 64 bit.
-// _M_X64             Microsoft specific macro for 64 bit based machines.
-// __x86_64           Defined by GNU C and Sun Studio for 64 bit based machines.
 
 // #####################################
 // ##    CPU specific optimizations   ##
@@ -143,11 +149,19 @@
 	#define HAS_TZMSK	// Mask from trailing zeros                 (~x &  (x - 1))
 #endif
 
-inline unsigned long BitScanLSB(const uint64_t mask) noexcept
+#ifdef __CUDA_ARCH__ 
+	#define CUDA_CALLABLE __host__ __device__
+#else
+	#define CUDA_CALLABLE
+#endif
+
+// BitScanLSB(0) is undefined behaviour
+CUDA_CALLABLE inline unsigned long BitScanLSB(const uint64_t mask) noexcept
 {
-	// OUT: mask == 0 results in undefined index
 	assert(mask);
-	#if defined(_MSC_VER)
+	#if defined(__CUDA_ARCH__)
+		return __ffsll(mask) - 1; // __ffsll(0) == 0
+	#elif defined(_MSC_VER)
 		unsigned long index = 0;
 		_BitScanForward64(&index, mask);
 		return index;
@@ -168,12 +182,14 @@ inline unsigned long BitScanMSB(const uint64_t mask) noexcept
 	#endif
 }
 
-inline uint64_t CountLeadingZeros(const uint64_t mask) noexcept
+CUDA_CALLABLE inline uint64_t CountLeadingZeros(const uint64_t mask) noexcept
 {
 	// _lzcnt_u64(0) == 64
 	// __builtin_clzll(0) is undefined
 	assert(mask);
-	#if defined(_MSC_VER)
+	#if defined(__CUDA_ARCH__)
+		return __clzll(mask);
+	#elif defined(_MSC_VER)
 		return _lzcnt_u64(mask);
 	#elif defined(__GNUC__)
 		return __builtin_clzll(mask);
@@ -192,7 +208,7 @@ inline uint64_t CountTrailingZeros(const uint64_t mask) noexcept
 	#endif
 }
 
-inline uint64_t GetLSB(const uint64_t b) noexcept
+CUDA_CALLABLE inline uint64_t GetLSB(const uint64_t b) noexcept
 {
 	#ifdef HAS_BLSI
 		return _blsi_u64(b); 
@@ -207,7 +223,7 @@ inline uint64_t GetMSB(const uint64_t b) noexcept
 	return b != 0u ? 0x8000000000000000ui64 >> CountLeadingZeros(b) : 0;
 }
 
-inline void RemoveLSB(uint64_t & b) noexcept
+CUDA_CALLABLE inline void RemoveLSB(uint64_t & b) noexcept
 {
 	#ifdef HAS_BLSR
 		b = _blsr_u64(b);
@@ -221,15 +237,17 @@ inline void RemoveMSB(uint64_t & b) noexcept
 	b ^= GetMSB(b);
 }
 
-template <typename T> inline uint64_t  MakeBit (                   const T pos ) noexcept { assert(pos < 64); return         1ui64 << pos; }
-template <typename T> inline void       SetBit (      uint64_t& b, const T pos ) noexcept { assert(pos < 64);         b |=  (1ui64 << pos); }
-template <typename T> inline void     ResetBit (      uint64_t& b, const T pos ) noexcept { assert(pos < 64);         b &= ~(1ui64 << pos); }
-template <typename T> inline bool      TestBit (const uint64_t  b, const T pos ) noexcept { assert(pos < 64); return (b &   (1ui64 << pos)) != 0; }
-template <typename T> inline bool      TestBits(const uint64_t  b, const T mask) noexcept { return (b & mask) == mask; }
+template <typename T> CUDA_CALLABLE inline uint64_t  MakeBit (                   const T pos ) noexcept { assert(pos < 64); return         1ui64 << pos; }
+template <typename T> CUDA_CALLABLE inline void       SetBit (      uint64_t& b, const T pos ) noexcept { assert(pos < 64);         b |=  (1ui64 << pos); }
+template <typename T> CUDA_CALLABLE inline void     ResetBit (      uint64_t& b, const T pos ) noexcept { assert(pos < 64);         b &= ~(1ui64 << pos); }
+template <typename T> CUDA_CALLABLE inline bool      TestBit (const uint64_t  b, const T pos ) noexcept { assert(pos < 64); return (b &   (1ui64 << pos)) != 0; }
+template <typename T> CUDA_CALLABLE inline bool      TestBits(const uint64_t  b, const T mask) noexcept { return (b & mask) == mask; }
 
-inline uint64_t PopCount(uint64_t b) noexcept
-{
-	#ifdef HAS_POPCNT
+CUDA_CALLABLE inline uint64_t PopCount(uint64_t b) noexcept
+{	
+	#if defined(__CUDA_ARCH__)
+		return __popcll(b);
+	#elif defined(HAS_POPCNT)
 		#if defined(_MSC_VER) || defined(__INTEL_COMPILER)
 			return _mm_popcnt_u64(b);
 		#else

@@ -1,8 +1,8 @@
-#include "Perft_basic.h"
+#include "Perft.h"
 #include "Utility.h"
+#include "kernel.cuh"
 #include <chrono>
 #include <iostream>
-
 #include <algorithm>
 #include <atomic>
 #include <functional>
@@ -23,6 +23,7 @@ void PrintHelp()
 
 int main(int argc, char* argv[])
 {
+	Initialize();
 	unsigned int depth = 21;
 	std::size_t RAM = 1024 * 1024 * 1024;
 
