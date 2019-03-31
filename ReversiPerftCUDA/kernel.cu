@@ -150,7 +150,7 @@ void Initialize()
 }
 
 template <const unsigned int dir>
-__device__ uint64_t CUDA_get_some_moves(const uint64_t P, const uint64_t mask)
+__device__ __inline__ uint64_t CUDA_get_some_moves(const uint64_t P, const uint64_t mask)
 {
 	// kogge-stone parallel prefix
 	// 12 x SHIFT, 10 x AND, 7 x OR
@@ -186,7 +186,7 @@ __device__ uint64_t CUDA_HasMoves(const CPosition& pos)
 	return 0;
 }
 
-__device__ uint64_t CUDA_flip_h(const CPosition& pos, const uint8_t move)
+__device__ __inline__ uint64_t CUDA_flip_h(const CPosition& pos, const uint8_t move)
 {
 	const uint64_t O = (pos.GetO() >> ((move & 0xF8) + 1)) & 0x3FULL;
 	const uint64_t P = (pos.GetP() >> (move & 0xF8)) & 0xFFULL;
@@ -194,7 +194,7 @@ __device__ uint64_t CUDA_flip_h(const CPosition& pos, const uint8_t move)
 	return static_cast<uint64_t>(d_FLIPS[move & 7][outflank]) << (move & 0xF8);
 }
 
-__device__ uint64_t CUDA_flip_v(const CPosition& pos, const uint8_t move)
+__device__ __inline__ uint64_t CUDA_flip_v(const CPosition& pos, const uint8_t move)
 {
 	const uint64_t O = ((pos.GetO() & (0x0001010101010100ULL << (move & 7))) * (0x0102040810204080ULL >> (move & 7))) >> 57;
 	const uint64_t P = ((pos.GetP() & (0x0101010101010101ULL << (move & 7))) * (0x0102040810204080ULL >> (move & 7))) >> 56;
@@ -202,7 +202,7 @@ __device__ uint64_t CUDA_flip_v(const CPosition& pos, const uint8_t move)
 	return d_STRETCH[d_FLIPS[(move >> 3)][outflank]] & (0x0101010101010101ULL << (move & 7));
 }
 
-__device__ uint64_t CUDA_flip_d(const CPosition& pos, const uint8_t move)
+__device__ __inline__ uint64_t CUDA_flip_d(const CPosition& pos, const uint8_t move)
 {
 	const uint64_t O = ((pos.GetO() & d_MASK_D[move] & 0x007E7E7E7E7E7E00ULL) * 0x0101010101010101ULL) >> 57;
 	const uint64_t P = ((pos.GetP() & d_MASK_D[move]) * 0x0101010101010101ULL) >> 56;
@@ -210,7 +210,7 @@ __device__ uint64_t CUDA_flip_d(const CPosition& pos, const uint8_t move)
 	return (d_FLIPS[move & 7][outflank] * 0x0101010101010101ULL) & d_MASK_D[move];
 }
 
-__device__ uint64_t CUDA_flip_c(const CPosition& pos, const uint8_t move)
+__device__ __inline__ uint64_t CUDA_flip_c(const CPosition& pos, const uint8_t move)
 {
 	const uint64_t O = ((pos.GetO() & d_MASK_C[move] & 0x007E7E7E7E7E7E00ULL) * 0x0101010101010101ULL) >> 57;
 	const uint64_t P = ((pos.GetP() & d_MASK_C[move]) * 0x0101010101010101ULL) >> 56;
