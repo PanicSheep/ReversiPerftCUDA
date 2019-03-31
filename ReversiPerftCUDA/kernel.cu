@@ -2,6 +2,7 @@
 #include "MacrosHell.h"
 #include "Position.h"
 #include <numeric>
+#include <omp.h>
 
 __constant__ uint8_t  d_OUTFLANK[8][ 64];
 __constant__ uint8_t  d_FLIPS   [8][256];
@@ -142,11 +143,15 @@ void Initialize()
 		else MASK_C[i] = 0x0102040810204080ULL >> (-(N + L - 7) * 8);
 	}
 
-	cudaMemcpyToSymbol(d_OUTFLANK, OUTFLANK, sizeof(uint8_t) * 8 * 64);
-	cudaMemcpyToSymbol(d_FLIPS, FLIPS, sizeof(uint8_t) * 8 * 256);
-	cudaMemcpyToSymbol(d_STRETCH, STRETCH, sizeof(uint64_t) * 256);
-	cudaMemcpyToSymbol(d_MASK_D, MASK_D, sizeof(uint64_t) * 64);
-	cudaMemcpyToSymbol(d_MASK_C, MASK_C, sizeof(uint64_t) * 64);
+	for (int i = 0; i < 2; i++)
+	{
+		cudaSetDevice(i);
+		cudaMemcpyToSymbol(d_OUTFLANK, OUTFLANK, sizeof(uint8_t) * 8 * 64);
+		cudaMemcpyToSymbol(d_FLIPS, FLIPS, sizeof(uint8_t) * 8 * 256);
+		cudaMemcpyToSymbol(d_STRETCH, STRETCH, sizeof(uint64_t) * 256);
+		cudaMemcpyToSymbol(d_MASK_D, MASK_D, sizeof(uint64_t) * 64);
+		cudaMemcpyToSymbol(d_MASK_C, MASK_C, sizeof(uint64_t) * 64);
+	}
 }
 
 template <const unsigned int dir>
@@ -269,7 +274,28 @@ __device__ uint32_t GPUperft3(const CPosition& pos)
 	return sum;
 }
 
-__global__ void kernel(const CPosition * const pos, uint32_t * const result, const std::size_t size)
+__device__ uint32_t GPUperft4(const CPosition& pos)
+{
+	auto moves = PossibleMoves(pos);
+	if (moves.empty())
+	{
+		auto pos_pass = pos.PlayPass();
+		if (CUDA_HasMoves(pos_pass))
+			return GPUperft3(pos_pass);
+		return 0;
+	}
+
+	uint32_t sum = 0;
+	while (!moves.empty())
+	{
+		auto move = moves.ExtractMove();
+		uint64_t flipped = CUDA_flip(pos, move);
+		sum += GPUperft3(pos.Play(move, flipped));
+	}
+	return sum;
+}
+
+__global__ void kernel(const CPosition * pos, uint32_t * result, uint64_t size)
 {
 	//volatile __shared__ uint32_t sdata[blockSize];
 	const std::size_t tid = threadIdx.x;
@@ -277,29 +303,33 @@ __global__ void kernel(const CPosition * const pos, uint32_t * const result, con
 
 	for (int i = tid + blockIdx.x * blockDim.x; i < size; i += gridSize)
 	{
-		result[i] = GPUperft3(pos[i]);
+		result[i] = GPUperft4(pos[i]);
 	}
 }
 
 uint64_t perft_3_gpu(const std::vector<CPosition>& pos)
 {
 	const std::size_t size = pos.size();
-	std::vector<uint32_t> result(size);
 
-	CPosition* d_pos;
-	uint32_t* d_res;
-	cudaMalloc((void **)&d_pos, sizeof(CPosition) * size);
-	cudaMalloc((void **)&d_res, sizeof(uint32_t)  * size);
-
+	thread_local static CPosition* d_pos = nullptr;
+	thread_local static uint32_t*  d_res = nullptr;
+	if (d_pos == nullptr)
+	{
+		cudaSetDevice(omp_get_thread_num() % 2);
+		cudaMalloc(&d_pos, sizeof(CPosition) * 100'000'000);
+		cudaMalloc(&d_res, sizeof(uint32_t) * 100'000'000);
+	}
+	
 	cudaMemcpy(d_pos, pos.data(), sizeof(CPosition) * size, cudaMemcpyHostToDevice);
 
 	kernel<<<128, 128>>>(d_pos, d_res, size);
 
+	std::vector<uint32_t> result(size);
 	cudaMemcpy(result.data(), d_res, sizeof(uint32_t) * size, cudaMemcpyDeviceToHost);
-	cudaFree(d_pos);
-	cudaFree(d_res);
-
-	return std::accumulate(result.begin(), result.end(), 0ui64);
+	//cudaFree(d_pos);
+	//cudaFree(d_res);
+	
+	return std::accumulate(result.begin(), result.begin() + size, 0ui64);
 }
 
 
