@@ -45,7 +45,7 @@ class NumberOfGamesCalculator
 	} depths;
 
 public:
-	NumberOfGamesCalculator(uint64_t BytesRAM, Depths = { 13, 5, 7, 3 });
+	NumberOfGamesCalculator(uint64_t BytesRAM, Depths = { 13, 6, 6, 4 });
 
 	static uint64_t CorrectValue(uint8_t depth);
 
