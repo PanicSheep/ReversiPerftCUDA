@@ -232,19 +232,19 @@ __device__ uint64_t CUDA_flip(const CPosition& pos, const uint8_t move)
 	return h | v | d | c;
 }
 
-__device__ uint32_t GPUperft1(const CPosition& pos, const bool from_pass = false)
+__device__ uint32_t GPUperft1(const CPosition& pos)
 {
 	auto moves = PossibleMoves(pos);
-	if (from_pass || !moves.empty())
-		return moves.size();
-	return PossibleMoves(pos.PlayPass()).empty() ? 0 : 1;
+	if (moves.empty())
+		return PossibleMoves(pos.PlayPass()).empty() ? 0 : 1;
+	return moves.size();
 }
 
 __device__ uint32_t GPUperft2(const CPosition& pos)
 {
 	auto moves = PossibleMoves(pos);
 	if (moves.empty())
-		return GPUperft1(pos.PlayPass(), true);
+		return GPUperft1(pos.PlayPass());
 
 	uint32_t sum = 0;
 	while (!moves.empty())
