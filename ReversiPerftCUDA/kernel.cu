@@ -235,20 +235,16 @@ __device__ uint64_t CUDA_flip(const CPosition& pos, const uint8_t move)
 __device__ uint32_t GPUperft1(const CPosition& pos, const bool from_pass = false)
 {
 	auto moves = PossibleMoves(pos);
-	if (moves.empty() && !from_pass)
-		return PossibleMoves(pos.PlayPass()).empty() ? 0 : 1;
-	return moves.size();
+	if (from_pass || !moves.empty())
+		return moves.size();
+	return PossibleMoves(pos.PlayPass()).empty() ? 0 : 1;
 }
 
-__device__ uint32_t GPUperft2(const CPosition& pos, const bool from_pass = false)
+__device__ uint32_t GPUperft2(const CPosition& pos)
 {
 	auto moves = PossibleMoves(pos);
 	if (moves.empty())
-	{
-		if (from_pass)
-			return 0;
 		return GPUperft1(pos.PlayPass(), true);
-	}
 
 	uint32_t sum = 0;
 	while (!moves.empty())
@@ -264,9 +260,7 @@ __device__ uint32_t GPUperft3(const CPosition& pos)
 {
 	auto moves = PossibleMoves(pos);
 	if (moves.empty())
-	{
-		return GPUperft2(pos.PlayPass(), true);
-	}
+		return GPUperft2(pos.PlayPass());
 
 	uint32_t sum = 0;
 	while (!moves.empty())
@@ -282,12 +276,7 @@ __device__ uint32_t GPUperft4(const CPosition& pos)
 {
 	auto moves = PossibleMoves(pos);
 	if (moves.empty())
-	{
-		auto pos_pass = pos.PlayPass();
-		if (CUDA_HasMoves(pos_pass))
-			return GPUperft3(pos_pass);
-		return 0;
-	}
+		return GPUperft3(pos.PlayPass());
 
 	uint32_t sum = 0;
 	while (!moves.empty())
