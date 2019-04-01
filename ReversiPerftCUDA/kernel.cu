@@ -232,23 +232,26 @@ __device__ uint64_t CUDA_flip(const CPosition& pos, const uint8_t move)
 	return h | v | d | c;
 }
 
+__device__ uint32_t GPUperft1(const CPosition& pos, const bool from_pass = false)
+{
+	auto moves = PossibleMoves(pos);
+	if (moves.empty() && !from_pass)
+		return PossibleMoves(pos.PlayPass()).empty() ? 0 : 1;
+	return moves.size();
+}
+
 __device__ uint32_t GPUperft2(const CPosition& pos)
 {
 	auto moves = PossibleMoves(pos);
 	if (moves.empty())
-		return PossibleMoves(pos.PlayPass()).size();
+		return GPUperft1(pos.PlayPass(), true);
 
 	uint32_t sum = 0;
 	while (!moves.empty())
 	{
 		auto move = moves.ExtractMove();
 		uint64_t flipped = CUDA_flip(pos, move);
-		const auto next_pos = pos.Play(move, flipped);
-		auto next_moves = PossibleMoves(next_pos);
-		if (next_moves.empty())
-			sum += CUDA_HasMoves(next_pos.PlayPass());
-		else
-			sum += next_moves.size();
+		sum += GPUperft1(pos.Play(move, flipped));
 	}
 	return sum;
 }
