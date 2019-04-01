@@ -240,11 +240,15 @@ __device__ uint32_t GPUperft1(const CPosition& pos, const bool from_pass = false
 	return moves.size();
 }
 
-__device__ uint32_t GPUperft2(const CPosition& pos)
+__device__ uint32_t GPUperft2(const CPosition& pos, const bool from_pass = false)
 {
 	auto moves = PossibleMoves(pos);
 	if (moves.empty())
+	{
+		if (from_pass)
+			return 0;
 		return GPUperft1(pos.PlayPass(), true);
+	}
 
 	uint32_t sum = 0;
 	while (!moves.empty())
@@ -261,10 +265,7 @@ __device__ uint32_t GPUperft3(const CPosition& pos)
 	auto moves = PossibleMoves(pos);
 	if (moves.empty())
 	{
-		auto pos_pass = pos.PlayPass();
-		if (CUDA_HasMoves(pos_pass))
-			return GPUperft2(pos_pass);
-		return 0;
+		return GPUperft2(pos.PlayPass(), true);
 	}
 
 	uint32_t sum = 0;
