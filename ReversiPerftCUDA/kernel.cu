@@ -232,62 +232,46 @@ __device__ uint64_t CUDA_flip(const CPosition& pos, const uint8_t move)
 	return h | v | d | c;
 }
 
-__device__ uint32_t GPUperft1(const CPosition& pos)
+template <int depth>
+__device__ uint32_t GPUperft(const CPosition& pos)
 {
 	auto moves = PossibleMoves(pos);
 	if (moves.empty())
-		return PossibleMoves(pos.PlayPass()).empty() ? 0 : 1;
-	return moves.size();
-}
-
-__device__ uint32_t GPUperft2(const CPosition& pos)
-{
-	auto moves = PossibleMoves(pos);
-	if (moves.empty())
-		return GPUperft1(pos.PlayPass());
+		return GPUperft<depth - 1>(pos.PlayPass());
 
 	uint32_t sum = 0;
 	while (!moves.empty())
 	{
 		auto move = moves.ExtractMove();
 		uint64_t flipped = CUDA_flip(pos, move);
-		sum += GPUperft1(pos.Play(move, flipped));
+		sum += GPUperft<depth - 1>(pos.Play(move, flipped));
 	}
 	return sum;
 }
 
-__device__ uint32_t GPUperft3(const CPosition& pos)
+template<>
+__device__ uint32_t GPUperft<2>(const CPosition& pos)
 {
 	auto moves = PossibleMoves(pos);
 	if (moves.empty())
-		return GPUperft2(pos.PlayPass());
+		return PossibleMoves(pos.PlayPass()).size();
 
 	uint32_t sum = 0;
 	while (!moves.empty())
 	{
 		auto move = moves.ExtractMove();
 		uint64_t flipped = CUDA_flip(pos, move);
-		sum += GPUperft2(pos.Play(move, flipped));
+		const auto next_pos = pos.Play(move, flipped);
+		auto next_moves = PossibleMoves(next_pos);
+		if (next_moves.empty())
+			sum += CUDA_HasMoves(next_pos.PlayPass());
+		else
+			sum += next_moves.size();
 	}
 	return sum;
 }
 
-__device__ uint32_t GPUperft4(const CPosition& pos)
-{
-	auto moves = PossibleMoves(pos);
-	if (moves.empty())
-		return GPUperft3(pos.PlayPass());
-
-	uint32_t sum = 0;
-	while (!moves.empty())
-	{
-		auto move = moves.ExtractMove();
-		uint64_t flipped = CUDA_flip(pos, move);
-		sum += GPUperft3(pos.Play(move, flipped));
-	}
-	return sum;
-}
-
+template <int depth>
 __global__ void kernel(const CPosition * pos, uint32_t * result, uint64_t size)
 {
 	//volatile __shared__ uint32_t sdata[blockSize];
@@ -296,7 +280,7 @@ __global__ void kernel(const CPosition * pos, uint32_t * result, uint64_t size)
 
 	for (int i = tid + blockIdx.x * blockDim.x; i < size; i += gridSize)
 	{
-		result[i] = GPUperft4(pos[i]);
+		result[i] = GPUperft<depth>(pos[i]);
 	}
 }
 
@@ -315,7 +299,7 @@ uint64_t perft_3_gpu(const std::vector<CPosition>& pos)
 	
 	cudaMemcpy(d_pos, pos.data(), sizeof(CPosition) * size, cudaMemcpyHostToDevice);
 
-	kernel<<<128, 128>>>(d_pos, d_res, size);
+	kernel<4><<<256, 64>>>(d_pos, d_res, size);
 
 	std::vector<uint32_t> result(size);
 	cudaMemcpy(result.data(), d_res, sizeof(uint32_t) * size, cudaMemcpyDeviceToHost);
