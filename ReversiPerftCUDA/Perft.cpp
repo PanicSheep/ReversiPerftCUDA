@@ -58,7 +58,7 @@ uint64_t NumberOfGamesCalculator::Calc(const uint8_t depth)
 
 uint64_t NumberOfGamesCalculator::Calc(const CPosition& pos, const uint8_t depth)
 {
-	if (depth < depths.uniques)
+	if (depth < depths.cpu_to_gpu + depths.gpu)
 		return perft(pos, depth);
 
 	Degeneracies deg(pos, depths.uniquification);
@@ -116,7 +116,7 @@ uint64_t NumberOfGamesCalculator::perft_cpu_to_gpu(const CPosition& pos, uint8_t
 	std::vector<CPosition> vec;
 	//Children children(pos, depths.cpu_to_gpu, depths.gpu);
 	generate_children(pos, depth - depths.gpu, [&vec](CPosition pos) { vec.push_back(pos); });
-	return perft_3_gpu(vec);
+	return perft_gpu(vec, depths.gpu, depths.blocks, depths.thrads_per_block);
 	//auto moves = pos.PossibleMoves();
 
 	//if (moves.empty())
@@ -170,11 +170,12 @@ uint64_t NumberOfGamesCalculator::perft_0()
 	return 1;
 }
 
-NumberOfGamesCalculator::Depths::Depths(uint8_t uniques, uint8_t uniquification, uint8_t cpu_to_gpu, uint8_t gpu)
-	: uniques(uniques)
-	, uniquification(uniquification)
+NumberOfGamesCalculator::Depths::Depths(uint8_t uniquification, uint8_t cpu_to_gpu, uint8_t gpu, uint16_t blocks, uint16_t thrads_per_block)
+	: uniquification(uniquification)
 	, cpu_to_gpu(cpu_to_gpu)
 	, gpu(gpu)
+	, blocks(blocks)
+	, thrads_per_block(thrads_per_block)
 {}
 
 Children::Children(CPosition pos, uint8_t cpu_depth, uint8_t gpu_depth)

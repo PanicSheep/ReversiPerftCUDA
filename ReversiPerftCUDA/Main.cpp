@@ -21,11 +21,15 @@ void PrintHelp()
 	//	<< std::endl;
 }
 
+constexpr uint64_t operator""_kB(uint64_t kilo_byte) { return kilo_byte * 1024; }
+constexpr uint64_t operator""_MB(uint64_t mega_byte) { return mega_byte * 1024 * 1024; }
+constexpr uint64_t operator""_GB(uint64_t giga_byte) { return giga_byte * 1024 * 1024 * 1024; }
+
 int main(int argc, char* argv[])
 {
 	Initialize();
 	unsigned int depth = 21;
-	std::size_t RAM = 1024 * 1024 * 1024;
+	constexpr std::size_t RAM = 1_GB;
 
 	//for (int i = 0; i < argc; i++)
 	//{
@@ -38,10 +42,10 @@ int main(int argc, char* argv[])
 	std::cout << "-----+--------------------------+-------+------------------+-----------------" << std::endl;
 
 	std::chrono::high_resolution_clock::time_point startTime, endTime;
-	for (uint8_t d = 1; d <= depth; d++)
+	for (uint8_t d = 0; d <= 19; d++)
 	{
 		startTime = std::chrono::high_resolution_clock::now();
-		uint64_t result = NumberOfGamesCalculator{RAM}.Calc(d);
+		uint64_t result = NumberOfGamesCalculator{ RAM, { /*uniquification*/ 6, /*cpu_to_gpu*/ 6, /*gpu*/ 4, /*blocks*/ 512, /*thrads_per_block*/ 128 } }.Calc(d);
 		endTime = std::chrono::high_resolution_clock::now();
 		auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
 

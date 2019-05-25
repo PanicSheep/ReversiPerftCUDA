@@ -36,16 +36,17 @@ class NumberOfGamesCalculator
 	Degeneracies unique_pos_multiplier{};
 
 	struct Depths {
-		uint8_t uniques;
 		uint8_t uniquification;
 		uint8_t cpu_to_gpu;
 		uint8_t gpu;
+		uint16_t blocks;
+		uint16_t thrads_per_block;
 
-		Depths(uint8_t uniques, uint8_t uniquification, uint8_t cpu_to_gpu, uint8_t gpu);
+		Depths(uint8_t uniquification, uint8_t cpu_to_gpu, uint8_t gpu, uint16_t blocks, uint16_t thrads_per_block);
 	} depths;
 
 public:
-	NumberOfGamesCalculator(uint64_t BytesRAM, Depths = { 13, 6, 6, 4 });
+	NumberOfGamesCalculator(uint64_t BytesRAM, Depths);
 
 	static uint64_t CorrectValue(uint8_t depth);
 

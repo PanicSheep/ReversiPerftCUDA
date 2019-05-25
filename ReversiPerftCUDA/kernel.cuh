@@ -3,12 +3,12 @@
 #include "cuda_runtime.h"
 #include <cstdint>
 #include <vector>
-#include <thrust\device_vector.h>
 
 void Initialize();
 
 class CPosition;
-uint64_t perft_3_gpu(const std::vector<CPosition>&);
+
+uint64_t perft_gpu(const std::vector<CPosition>&, int gpu_depth, int blocks, int threads_per_block);
 
 #define HDI __host__ __device__ __inline__
 
@@ -36,3 +36,30 @@ uint64_t perft_3_gpu(const std::vector<CPosition>&);
 //	typedef std::remove_extent_t<T> Elem;
 //	return unique_device_ptr<T>(new Elem[size]());
 //}
+
+// Dynamic size on host
+// Static size on device
+//template <typename T>
+//class DeviceArray
+//{
+//	T* device_ptr = nullptr;
+//	std::size_t m_size;
+//	int m_device_id;
+//
+//	void alloc() { cudaMalloc(&device_ptr, m_size * sizeof(T)); }
+//	void free() { cudaFree(device_ptr); }
+//public:
+//	HDI MemoryGuard(const std::size_t size, int device_id = 0) : m_size(size), m_device_id(device_id)
+//	{
+//		cudaSetDevice(device_id);
+//		alloc();
+//	}
+//	HDI DiviceArray(const DiviceArray&) = delete;
+//	HDI DiviceArray(DiviceArray&&) = default;
+//	HDI ~DiviceArray() { free(); }
+//
+//	HDI DiviceArray& operator=(const DiviceArray&) = delete;
+//	HDI DiviceArray& operator=(DiviceArray&&) = default;
+//};
+//
+//class Device
