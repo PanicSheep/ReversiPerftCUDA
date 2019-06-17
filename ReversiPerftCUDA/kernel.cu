@@ -232,13 +232,31 @@ __device__ uint64_t CUDA_flip(const CPosition& pos, const uint8_t move)
 	return h | v | d | c;
 }
 
-__device__ uint32_t GPUperft2(const CPosition& pos)
+template <int depth>
+__device__ uint64_t GPUperft(const CPosition& pos)
+{
+	auto moves = PossibleMoves(pos);
+	if (moves.empty())
+		return GPUperft<depth - 1>(pos.PlayPass());
+
+	uint64_t sum = 0;
+	while (!moves.empty())
+	{
+		auto move = moves.ExtractMove();
+		uint64_t flipped = CUDA_flip(pos, move);
+		sum += GPUperft<depth - 1>(pos.Play(move, flipped));
+	}
+	return sum;
+}
+
+template<>
+__device__ uint64_t GPUperft<2>(const CPosition& pos)
 {
 	auto moves = PossibleMoves(pos);
 	if (moves.empty())
 		return PossibleMoves(pos.PlayPass()).size();
 
-	uint32_t sum = 0;
+	uint64_t sum = 0;
 	while (!moves.empty())
 	{
 		auto move = moves.ExtractMove();
@@ -253,198 +271,85 @@ __device__ uint32_t GPUperft2(const CPosition& pos)
 	return sum;
 }
 
-__device__ uint32_t GPUperft3(const CPosition& pos)
+template <int depth>
+__global__ void kernel(const DeviceVector<CPosition> pos, DeviceVector<uint64_t> result)
 {
-	auto moves = PossibleMoves(pos);
-	if (moves.empty())
-	{
-		auto pos_pass = pos.PlayPass();
-		if (CUDA_HasMoves(pos_pass))
-			return GPUperft2(pos_pass);
-		return 0;
-	}
-
-	uint32_t sum = 0;
-	while (!moves.empty())
-	{
-		auto move = moves.ExtractMove();
-		uint64_t flipped = CUDA_flip(pos, move);
-		sum += GPUperft2(pos.Play(move, flipped));
-	}
-	return sum;
-}
-
-__device__ uint32_t GPUperft4(const CPosition& pos)
-{
-	auto moves = PossibleMoves(pos);
-	if (moves.empty())
-	{
-		auto pos_pass = pos.PlayPass();
-		if (CUDA_HasMoves(pos_pass))
-			return GPUperft3(pos_pass);
-		return 0;
-	}
-
-	uint32_t sum = 0;
-	while (!moves.empty())
-	{
-		auto move = moves.ExtractMove();
-		uint64_t flipped = CUDA_flip(pos, move);
-		sum += GPUperft3(pos.Play(move, flipped));
-	}
-	return sum;
-}
-
-__global__ void kernel(const CPosition * pos, uint32_t * result, uint64_t size)
-{
-	//volatile __shared__ uint32_t sdata[blockSize];
 	const std::size_t tid = threadIdx.x;
 	const std::size_t gridSize = blockDim.x * gridDim.x;
 
-	for (int i = tid + blockIdx.x * blockDim.x; i < size; i += gridSize)
-	{
-		result[i] = GPUperft4(pos[i]);
-	}
+	for (int i = tid + blockIdx.x * blockDim.x; i < pos.size(); i += gridSize)
+		result[i] = GPUperft<depth>(pos[i]);
 }
 
-uint64_t perft_3_gpu(const std::vector<CPosition>& pos)
+//template <int depth>
+//__device__ void GenerateNexts(const CPosition& pos, CPosition*& out)
+//{
+//	auto moves = PossibleMoves(in);
+//	if (moves.empty())
+//		GenerateNexts<depth - 1>(pos.PlayPass(), out);
+//
+//	while (!moves.empty())
+//	{
+//		auto move = moves.ExtractMove();
+//		uint64_t flipped = CUDA_flip(pos, move);
+//		GenerateNexts<depth - 1>(pos.Play(move, flipped), out);
+//	}
+//}
+//
+//template<>
+//__device__ void GenerateNexts<0>(const CPosition& pos, CPosition*& out)
+//{
+//	auto moves = PossibleMoves(pos);
+//	if (moves.empty())
+//		*(out++) = pos.PlayPass();
+//
+//	while (!moves.empty())
+//	{
+//		auto move = moves.ExtractMove();
+//		uint64_t flipped = CUDA_flip(pos, move);
+//		*(out++) = pos.Play(move, flipped);
+//	}
+//}
+
+//template <int depth>
+//__global__ uint64_t kernel2(const CPosition * in, CPosition ** mid, uint64_t size)
+//{
+//	const std::size_t tid = threadIdx.x;
+//	const std::size_t gridSize = blockDim.x * gridDim.x;
+//
+//	for (int i = tid + blockIdx.x * blockDim.x; i < size; i += gridSize)
+//	{
+//		GenerateNexts<depth>(pos[i], mid[i * ??? ]);
+//		mid[i] = GPUperft<depth>(pos[i]);
+//	}
+//}
+
+uint64_t perft_gpu(const std::vector<CPosition>& pos, int gpu_depth, int blocks, int threads_per_block)
 {
-	const std::size_t size = pos.size();
+	static thread_local int tid = []() { int n; cudaGetDeviceCount(&n); int tid = omp_get_thread_num() % n; cudaSetDevice(tid); return tid; }();
+	static thread_local HostVector<CPosition> host_pos(1'000'000);
+	static thread_local HostVector<uint64_t> host_res(1'000'000);
+	static thread_local DeviceVector<CPosition> device_pos(1'000'000);
+	static thread_local DeviceVector<uint64_t> device_res(1'000'000);
 
-	thread_local static CPosition* d_pos = nullptr;
-	thread_local static uint32_t*  d_res = nullptr;
-	if (d_pos == nullptr)
+	host_pos = pos;
+	device_pos.store(host_pos, asyn);
+
+	device_res.resize(pos.size());
+
+	switch (gpu_depth)
 	{
-		cudaSetDevice(omp_get_thread_num() % 2);
-		cudaMalloc(&d_pos, sizeof(CPosition) * 100'000'000);
-		cudaMalloc(&d_res, sizeof(uint32_t) * 100'000'000);
+	case 2: kernel<2><<<blocks, threads_per_block>>>(device_pos, device_res); break;
+	case 3: kernel<3><<<blocks, threads_per_block>>>(device_pos, device_res); break;
+	case 4: kernel<4><<<blocks, threads_per_block>>>(device_pos, device_res); break;
+	case 5: kernel<5><<<blocks, threads_per_block>>>(device_pos, device_res); break;
 	}
+	cudaError_t err = cudaDeviceSynchronize();
+	if (err != 0) {
+		auto tmp = cudaGetErrorString(err);
+		std::cerr << tmp << std::endl;
+	}
+	host_res = device_res;
 	
-	cudaMemcpy(d_pos, pos.data(), sizeof(CPosition) * size, cudaMemcpyHostToDevice);
-
-	kernel<<<128, 128>>>(d_pos, d_res, size);
-
-	std::vector<uint32_t> result(size);
-	cudaMemcpy(result.data(), d_res, sizeof(uint32_t) * size, cudaMemcpyDeviceToHost);
-	//cudaFree(d_pos);
-	//cudaFree(d_res);
-	
-	return std::accumulate(result.begin(), result.begin() + size, 0ui64);
+	return std::accumulate(host_res.begin(), host_res.end(), 0ui64);
 }
-
-
-//cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size);
-//
-//__global__ void addKernel(int *c, const int *a, const int *b)
-//{
-//    int i = threadIdx.x;
-//    c[i] = a[i] + b[i];
-//}
-//
-//int main()
-//{
-//    const int arraySize = 5;
-//    const int a[arraySize] = { 1, 2, 3, 4, 5 };
-//    const int b[arraySize] = { 10, 20, 30, 40, 50 };
-//    int c[arraySize] = { 0 };
-//
-//    // Add vectors in parallel.
-//    cudaError_t cudaStatus = addWithCuda(c, a, b, arraySize);
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "addWithCuda failed!");
-//        return 1;
-//    }
-//
-//    printf("{1,2,3,4,5} + {10,20,30,40,50} = {%d,%d,%d,%d,%d}\n",
-//        c[0], c[1], c[2], c[3], c[4]);
-//
-//    // cudaDeviceReset must be called before exiting in order for profiling and
-//    // tracing tools such as Nsight and Visual Profiler to show complete traces.
-//    cudaStatus = cudaDeviceReset();
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaDeviceReset failed!");
-//        return 1;
-//    }
-//
-//    return 0;
-//}
-//
-//// Helper function for using CUDA to add vectors in parallel.
-//cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size)
-//{
-//    int *dev_a = 0;
-//    int *dev_b = 0;
-//    int *dev_c = 0;
-//    cudaError_t cudaStatus;
-//
-//    // Choose which GPU to run on, change this on a multi-GPU system.
-//    cudaStatus = cudaSetDevice(0);
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
-//        goto Error;
-//    }
-//
-//    // Allocate GPU buffers for three vectors (two input, one output)    .
-//    cudaStatus = cudaMalloc((void**)&dev_c, size * sizeof(int));
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaMalloc failed!");
-//        goto Error;
-//    }
-//
-//    cudaStatus = cudaMalloc((void**)&dev_a, size * sizeof(int));
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaMalloc failed!");
-//        goto Error;
-//    }
-//
-//    cudaStatus = cudaMalloc((void**)&dev_b, size * sizeof(int));
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaMalloc failed!");
-//        goto Error;
-//    }
-//
-//    // Copy input vectors from host memory to GPU buffers.
-//    cudaStatus = cudaMemcpy(dev_a, a, size * sizeof(int), cudaMemcpyHostToDevice);
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaMemcpy failed!");
-//        goto Error;
-//    }
-//
-//    cudaStatus = cudaMemcpy(dev_b, b, size * sizeof(int), cudaMemcpyHostToDevice);
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaMemcpy failed!");
-//        goto Error;
-//    }
-//
-//    // Launch a kernel on the GPU with one thread for each element.
-//    addKernel<<<1, size>>>(dev_c, dev_a, dev_b);
-//
-//    // Check for any errors launching the kernel
-//    cudaStatus = cudaGetLastError();
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
-//        goto Error;
-//    }
-//    
-//    // cudaDeviceSynchronize waits for the kernel to finish, and returns
-//    // any errors encountered during the launch.
-//    cudaStatus = cudaDeviceSynchronize();
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
-//        goto Error;
-//    }
-//
-//    // Copy output vector from GPU buffer to host memory.
-//    cudaStatus = cudaMemcpy(c, dev_c, size * sizeof(int), cudaMemcpyDeviceToHost);
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaMemcpy failed!");
-//        goto Error;
-//    }
-//
-//Error:
-//    cudaFree(dev_c);
-//    cudaFree(dev_a);
-//    cudaFree(dev_b);
-//    
-//    return cudaStatus;
-//}
