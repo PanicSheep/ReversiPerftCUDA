@@ -41,12 +41,11 @@ int main(int argc, char* argv[])
 	std::cout << "depth|        Positions         |correct|       Time       |       N/s       " << std::endl;
 	std::cout << "-----+--------------------------+-------+------------------+-----------------" << std::endl;
 
-	std::chrono::high_resolution_clock::time_point startTime, endTime;
-	for (uint8_t d = 0; d <= 19; d++)
+	for (uint8_t d = 1; d <= 16; d++)
 	{
-		startTime = std::chrono::high_resolution_clock::now();
-		uint64_t result = NumberOfGamesCalculator{ RAM, { /*uniquification*/ 6, /*cpu_to_gpu*/ 6, /*gpu*/ 4, /*blocks*/ 512, /*thrads_per_block*/ 128 } }.Calc(d);
-		endTime = std::chrono::high_resolution_clock::now();
+		auto startTime = std::chrono::high_resolution_clock::now();
+		auto result = NumberOfGamesCalculator{ RAM, { /*uniquification*/ 6, /*cpu_to_gpu*/ 7, /*gpu*/ 4, /*blocks*/ 512, /*thrads_per_block*/ 128 } }.Calc(d);
+		auto endTime = std::chrono::high_resolution_clock::now();
 		auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
 
 		printf(" %3u | %24s |%7s| %14s | %15s\n",
