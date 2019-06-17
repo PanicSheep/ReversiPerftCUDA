@@ -272,12 +272,12 @@ __device__ uint64_t GPUperft<2>(const CPosition& pos)
 }
 
 template <int depth>
-__global__ void kernel(const CPosition * pos, uint64_t * result, uint64_t size)
+__global__ void kernel(const DeviceVector<CPosition> pos, DeviceVector<uint64_t> result)
 {
 	const std::size_t tid = threadIdx.x;
 	const std::size_t gridSize = blockDim.x * gridDim.x;
 
-	for (int i = tid + blockIdx.x * blockDim.x; i < size; i += gridSize)
+	for (int i = tid + blockIdx.x * blockDim.x; i < pos.size(); i += gridSize)
 		result[i] = GPUperft<depth>(pos[i]);
 }
 
@@ -324,73 +324,32 @@ __global__ void kernel(const CPosition * pos, uint64_t * result, uint64_t size)
 //	}
 //}
 
-class MemoryGuard
-{
-	std::size_t m_size;
-
-	void alloc()
-	{
-		cudaMallocHost(&h_pos, m_size * sizeof(CPosition));
-		cudaMallocHost(&h_res, m_size * sizeof(uint64_t));
-		cudaMalloc    (&d_pos, m_size * sizeof(CPosition));
-		cudaMalloc    (&d_res, m_size * sizeof(uint64_t));
-	}
-
-	void free()
-	{
-		cudaFree    (d_res);
-		cudaFree    (d_pos);
-		cudaFreeHost(h_res);
-		cudaFreeHost(h_pos);
-	}
-
-public:
-	CPosition* h_pos = nullptr;
-	uint64_t*  h_res = nullptr;
-	CPosition* d_pos = nullptr;
-	uint64_t*  d_res = nullptr;
-
-	MemoryGuard(const std::size_t size) : m_size(size)
-	{
-		int nDevices;
-		cudaGetDeviceCount(&nDevices);
-		cudaSetDevice(omp_get_thread_num() % nDevices);
-		alloc();
-	}
-
-	~MemoryGuard()
-	{
-		free();
-	}
-
-	void reserve(const std::size_t size)
-	{
-		free();
-		m_size = size;
-		alloc();
-	}
-
-	std::size_t size() const { return m_size; }
-};
-
 uint64_t perft_gpu(const std::vector<CPosition>& pos, int gpu_depth, int blocks, int threads_per_block)
 {
-	static thread_local MemoryGuard this_thread(10'000'000);
+	static thread_local int tid = []() { int n; cudaGetDeviceCount(&n); int tid = omp_get_thread_num() % n; cudaSetDevice(tid); return tid; }();
+	static thread_local HostVector<CPosition> host_pos(1'000'000);
+	static thread_local HostVector<uint64_t> host_res(1'000'000);
+	static thread_local DeviceVector<CPosition> device_pos(1'000'000);
+	static thread_local DeviceVector<uint64_t> device_res(1'000'000);
 
-	const std::size_t size = pos.size();
-	if (size >= this_thread.size())
-		this_thread.reserve(size * 2);
-	std::copy(pos.begin(), pos.end(), this_thread.h_pos);
-	
-	cudaMemcpyAsync(this_thread.d_pos, this_thread.h_pos, sizeof(CPosition) * size, cudaMemcpyHostToDevice);
+	host_pos = pos;
+	device_pos.store(host_pos, asyn);
+
+	device_res.resize(pos.size());
+
 	switch (gpu_depth)
 	{
-	case 2: kernel<2><<<blocks, threads_per_block>>>(this_thread.d_pos, this_thread.d_res, size); break;
-	case 3: kernel<3><<<blocks, threads_per_block>>>(this_thread.d_pos, this_thread.d_res, size); break;
-	case 4: kernel<4><<<blocks, threads_per_block>>>(this_thread.d_pos, this_thread.d_res, size); break;
-	case 5: kernel<5><<<blocks, threads_per_block>>>(this_thread.d_pos, this_thread.d_res, size); break;
+	case 2: kernel<2><<<blocks, threads_per_block>>>(device_pos, device_res); break;
+	case 3: kernel<3><<<blocks, threads_per_block>>>(device_pos, device_res); break;
+	case 4: kernel<4><<<blocks, threads_per_block>>>(device_pos, device_res); break;
+	case 5: kernel<5><<<blocks, threads_per_block>>>(device_pos, device_res); break;
 	}
-	cudaMemcpy(this_thread.h_res, this_thread.d_res, sizeof(uint64_t) * size, cudaMemcpyDeviceToHost);
+	cudaError_t err = cudaDeviceSynchronize();
+	if (err != 0) {
+		auto tmp = cudaGetErrorString(err);
+		std::cerr << tmp << std::endl;
+	}
+	host_res = device_res;
 	
-	return std::accumulate(this_thread.h_res, this_thread.h_res + size, 0ui64);
+	return std::accumulate(host_res.begin(), host_res.end(), 0ui64);
 }
