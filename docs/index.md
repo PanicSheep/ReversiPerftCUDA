@@ -1,37 +1,3562 @@
-## Welcome to GitHub Pages
+# OEIS A124004 at n=20
+[A124004](https://oeis.org/A124004) is the interger sequence of numbers of possible [Reversi](https://en.wikipedia.org/wiki/Reversi) games at the end of the n-th ply.
 
-You can use the [editor on GitHub](https://github.com/PanicSheep/ReversiPerftCUDA/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
+At the end of the 20-th ply there are **349'980'362'625'040'712** possible Reversi games, and here is how you can reproduce this result.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+The sequence begins with the starting board
 
-### Markdown
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/---------------------------OX------XO---------------------------.png)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+which has 4 sucessors, one for each red cross. Thus A124004(n=0) = 1 and A124004(n=1) = 4.
 
-```markdown
-Syntax highlighted code block
+The symmetry group of a board is [Dih4](https://en.wikipedia.org/wiki/Dihedral_group), the same as for a square. There is one additional symmetrie, where we can swap the colors of the disc on the board and change which color is about to play. We use this symmetrie to transform each position so that always black is about to play.
 
-# Header 1
-## Header 2
-### Header 3
+At the end of the 6-th ply there are 8'200 possible Reversi games. Using the transformations from [Dih4](https://en.wikipedia.org/wiki/Dihedral_group) the 8'200 positions can be reduced to a set of 1'773 unique positions. We can now calculate how many games each unique position has at the end of its 14-th ply and associate it with the position. Then we can go through the original 8'200 positions and find their symmetric partner in the 1'773 ones and add the associated numbers up to arrive at A124004(n = 20).
 
-- Bulleted
-- List
+These are the 1'773 unique positions after the 6-th ply, each with its number of possible games at the end of its 14-th ply:
 
-1. Numbered
-2. List
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOO-----OXO------X-----------.png) 53'069'397'754'342
 
-**Bold** and _Italic_ and `Code` text
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOO-----OXO-----X------------.png) 43'011'141'275'019
 
-[Link](url) and ![Image](src)
-```
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OO------OX-----XX------X-----.png) 13'876'189'346'342
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OO------OX-----XXX-----------.png) 25'706'268'240'084
 
-### Jekyll Themes
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOO-----OXX--------X---------.png) 45'765'061'317'586
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/PanicSheep/ReversiPerftCUDA/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OOOO------XX--------X---------.png) 41'386'508'523'254
 
-### Support or Contact
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOO-----OXXX-----------------.png) 75'508'084'924'672
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OOOO------XXX-----------------.png) 67'711'566'209'667
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OO-----OOOO-----X-X------------------.png) 23'597'825'710'167
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OO------XOX------X--------X--.png) 17'218'820'795'553
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OO------XOX------X------X----.png) 17'251'530'865'992
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO---OOOO------XX-------X-----------.png) 39'321'401'867'594
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OOOO----XX-------X-----------.png) 37'108'128'799'138
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OOOO----XXX------------------.png) 68'163'458'834'096
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OO------XXXX---X-------------.png) 19'911'170'893'270
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OO------XXXX---X-------------.png) 18'666'070'154'308
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------OO------XXXX---X-------------.png) 20'116'416'413'548
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OO-----OOOO----X--X------------------.png) 22'388'984'152'821
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOX-----O------XXX-----------.png) 8'495'150'517'410
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOX-----OXX-------X----------.png) 81'596'331'924'584
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OOX-----XO-------O-------O---.png) 22'549'323'835'026
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O-----OOO------OOX-----XO-------------------.png) 32'904'497'909'018
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO---OOOOX-----X--------X-----------.png) 16'350'372'174'531
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOX----OX-----O-X------------.png) 28'404'183'897'597
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO---OOOOX-----X-------X------------.png) 15'938'806'787'887
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OOX-----XO------XO-----------.png) 51'448'319'489'878
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------OOX-----XOO----X-------------.png) 55'402'483'644'385
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OO-----OOOX-----X--X-----------------.png) 14'886'375'450'683
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOXO----X--X---X-------------.png) 20'035'071'039'534
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OOXO----X--X---X-------------.png) 11'221'780'954'531
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------OOXO----X--X---X-------------.png) 13'050'844'523'340
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OOX-----XOX------O-----------.png) 73'517'315'117'380
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOX-----X-X----X--X----------.png) 14'758'436'397'981
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OOX-----X-X----X--X----------.png) 8'009'245'865'468
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------OOX-----X-X----X--X----------.png) 12'879'651'047'921
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOX----OXX----O--------------.png) 63'699'592'085'081
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OOX-----XXO--------O---------.png) 58'180'432'099'359
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OOX-----XXO------X-----------.png) 99'659'317'908'157
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OOX-----XXO-----X------------.png) 71'615'622'591'315
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOX-----XX-X---X-------------.png) 32'841'627'622'434
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OOX-----XX-X---X-------------.png) 22'163'698'107'668
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------OOX-----XX-X---X-------------.png) 20'665'352'161'976
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOX----XO-------O-------O----.png) 15'112'392'731'087
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OOX----XOX------O------------.png) 78'398'039'261'553
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OOOX----XX-------X------------.png) 48'361'902'880'831
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OOOX----XXX-------------------.png) 97'180'190'040'551
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX-----O-----XXX-------------.png) 5'200'891'712'443
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX-----OOOX------------------.png) 44'628'196'817'259
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OOO-----OXO------X-------------------.png) 64'922'997'185'538
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OX------OX-----XX------X-----.png) 16'903'106'992'213
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OX------OX-----XXX-----------.png) 24'483'913'477'243
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OOO-----OX------OXX------------------.png) 35'669'490'934'955
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OXO----O-XX--------X---------.png) 48'519'834'100'901
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX-----O-XX-------X----------.png) 23'302'395'671'616
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO----OOOX-------XX-------X----------.png) 18'042'108'205'244
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO----OOOX-------XX-------X----------.png) 14'725'380'879'719
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OX------OXX----O--X----------.png) 40'406'505'988'013
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO----OOOX-------XX-------X----------.png) 18'820'376'352'259
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX-----O-XX------X-----------.png) 22'114'884'200'801
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX----O--XX------X-----------.png) 18'455'804'330'793
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO----OOOX-------XX------X-----------.png) 16'951'888'436'869
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OXO----O-XXX-----------------.png) 79'461'644'158'137
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX-----OX-----O------O-------.png) 15'211'752'413'008
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOOOO----OXO-----XO-------------------.png) 31'526'897'877'045
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------O----OOO-----OOX-----OX--------------------.png) 26'132'493'598'648
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OXO-----XOO----X-------------.png) 48'686'737'711'001
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOOO----OXOO----X------X-------------.png) 17'305'031'856'811
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OOO-----OXO-----X-O----X-------------.png) 24'335'456'692'007
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OOO-----OXOO----X------X-------------.png) 18'975'055'586'571
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------O----OOO------OX------X------XO------------.png) 8'746'980'186'044
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------O--------O--------OOO------OX------X------XO------------.png) 5'301'831'685'440
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXO-----XX-O-----X-----------.png) 33'739'708'896'957
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOOOO----OX------XX-------X-----------.png) 30'958'592'433'267
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------O----OOO------OX------XX-------X-----------.png) 16'712'710'381'882
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXO-----XX-O----X------------.png) 39'154'952'556'880
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OXO-----XXO----X-------------.png) 80'686'786'588'894
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OXOO----XX-----X-------------.png) 50'600'121'969'217
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOOO----OX------XXO----X-------------.png) 30'682'682'279'816
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOOO----OXO-----XX-----X-------------.png) 47'146'876'085'965
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OXOO----XX-----X-------------.png) 28'009'535'102'212
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OOO-----OXO-----XX-----X-------------.png) 61'130'732'935'027
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OXOO----XX-----X-------------.png) 32'689'282'858'016
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OX------XX-----X-XO----------.png) 29'854'290'727'348
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OX------XX-----X-XO----------.png) 21'170'185'378'329
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXO-----XXXO-----------------.png) 67'379'878'392'071
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX-----OXXX------------------.png) 90'227'588'946'752
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX----O-XXX------------------.png) 51'483'905'533'701
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO----OOOX------XXX------------------.png) 55'652'868'955'846
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOOOO----OX------XXX------------------.png) 37'408'165'170'860
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------O----OOO------OX------XXX------------------.png) 19'602'117'409'431
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O------OOO------OX------XXX------------------.png) 28'360'194'019'783
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OX-----OXXX-------X----------.png) 41'876'002'465'852
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX------XXX-------X----------.png) 50'166'409'209'012
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO-----OOX------XXX-------X----------.png) 43'366'574'522'629
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OX-----OXXX-------X----------.png) 45'606'321'855'321
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO-----OOX------XXX-------X----------.png) 50'124'294'660'637
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OX------XXX----X--O----------.png) 39'913'718'391'049
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OX------XXX----X--O----------.png) 26'426'067'463'988
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX-----XO-----X-O------------.png) 43'898'738'885'856
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OX-----XOX------X--------X---.png) 20'617'761'062'584
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OX-----XOX------X------X-----.png) 20'834'832'027'809
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO----OX-----XX------X-------------.png) 27'957'815'346'787
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OO------OX-----XX------X-------------.png) 31'025'219'472'358
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO----OX-----XXX-------------------.png) 51'979'962'240'705
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OO------OX-----XXX-------------------.png) 50'571'870'177'937
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----OX-----XXX-----XO------------.png) 78'651'629'045'456
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OX-----XXX-----XO------------.png) 44'388'335'838'776
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX----XOX-----O--------------.png) 35'806'116'174'118
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OX----XOX-----X-------X------.png) 7'077'355'802'855
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OX----XOX-----X-------X------.png) 7'770'118'162'955
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOX----XXO-------O------------.png) 57'240'439'906'078
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OX----XXO-------X--------X---.png) 17'858'509'624'238
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OX----XXO-------X--------X---.png) 13'989'656'788'495
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO----OX----XXX--------------------.png) 29'027'555'367'655
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OO------OX----XXX--------------------.png) 27'331'797'279'491
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O------OOO------OX----XXX--------------------.png) 18'405'116'512'478
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------O--------O--------OOO------OX----XXX--------------------.png) 6'866'496'749'415
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OX----XXX------XO------------.png) 23'319'610'180'944
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OX----XXX------XO------------.png) 19'292'313'126'684
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXO---XXX-X------------------.png) 38'026'710'411'643
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OXO---XXX-X------------------.png) 32'179'087'707'703
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OX----XXXX------O------------.png) 48'812'463'297'751
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OX----XXXX------O------------.png) 37'888'309'571'307
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OX----XXXXX------------------.png) 26'898'055'197'487
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OX----XXXXX------------------.png) 24'110'392'961'056
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OXX-----O------XXX-----------.png) 7'641'733'101'884
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX-----OX------O-------O----.png) 36'172'845'503'774
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX-----OX------O-X----------.png) 62'185'645'430'341
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOXX----O-X--------X----------.png) 31'461'622'335'738
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OXX-----OX-----O--X----------.png) 51'238'556'330'065
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OO------OXX-----OX------O-X----------.png) 51'846'593'811'924
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX-----OX------OX-----------.png) 75'736'307'535'593
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX----OOX-------X-----------.png) 63'692'022'623'914
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOXX----O-X-------X-----------.png) 34'205'612'266'946
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOXX---O--X-------X-----------.png) 28'900'664'727'407
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO----OOOXX------X-------X-----------.png) 27'559'842'455'504
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OXX-----OXO------X-----------.png) 90'420'265'235'336
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OXX----OOX-------X-----------.png) 67'229'972'221'039
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOXX----O-X------X------------.png) 33'712'709'070'004
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOXX---O--X------X------------.png) 26'292'593'208'543
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO----OOOXX------X------X------------.png) 25'299'396'881'662
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OXX-----OXO-----X------------.png) 73'178'492'407'185
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX-----OXX-----O------------.png) 84'000'513'034'692
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OOXX------XX-------X----------.png) 68'364'259'436'278
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OXX-----OXX-------X----------.png) 53'496'099'771'417
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO-----OOXX------XX-------X----------.png) 31'555'852'931'115
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX-----XO--------O--------O-.png) 18'872'346'322'427
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OOXX----OXO-------------------.png) 120'466'881'063'660
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------O--------O--------OOO------OXX-----XO-------------------.png) 18'896'604'706'838
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX-----XO-------OX----------.png) 71'728'695'293'364
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX-----XO-------XO----------.png) 49'059'530'235'107
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX-----XO------X-O----------.png) 36'755'557'108'118
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OXX---OOX-------X------------.png) 19'492'212'187'341
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOOO----OXX-----X-O----X-------------.png) 39'056'586'732'551
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX----OXO-----X-------------.png) 76'321'518'819'560
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OXX-----XOO----X-------------.png) 63'544'900'937'178
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OXX---OOX------X-------------.png) 24'221'902'497'963
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O---OOOO------OXX-----X------X-------------.png) 16'214'727'476'337
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------OXX----OXO-----X-------------.png) 85'549'581'781'015
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OOOO-----OXX-----X------X-------------.png) 29'807'821'357'723
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO----OXX-----X--X-----------------.png) 45'043'743'791'423
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OOOO----OXX-----X--X-----------------.png) 32'404'747'465'172
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX-----XOX-------O----------.png) 56'587'857'796'185
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX-----XOX------O-----------.png) 79'219'853'798'854
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXX----OXX--------X----------.png) 44'628'551'086'548
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OO------OXX----OXX--------X----------.png) 34'421'887'509'688
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO------OXX-----XXO----X-------------.png) 55'968'876'973'135
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------OXXX----XO-O-----------------.png) 50'907'603'020'963
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-O----OXXX----XO-------------------.png) 45'061'845'270'561
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOOO----OXOX-----O--------------------.png) 25'970'055'868'332
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------XOX-------O-------XXX--------.png) 3'749'356'836'837
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOOO-----XOX-------OX-----------------.png) 29'146'289'362'140
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OOO-----XOX-------OX-----------------.png) 19'699'232'066'036
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOOO----XOXO------X-------X----------.png) 25'260'497'858'550
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOO-----XOXO------X-------X----------.png) 21'370'802'201'983
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XOX-------X-------X----------.png) 24'669'757'415'728
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OO------XOX-------X-------X----------.png) 21'846'625'182'884
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------O------O----OOO-----XOX-------X-------X----------.png) 4'223'386'725'991
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XOX------OXX-----O-----------.png) 55'447'523'255'698
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------XOX------OXX-----O-----------.png) 43'689'172'493'430
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XOXO------XX------X----------.png) 21'851'507'861'046
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------XOXO------XX------X----------.png) 12'536'190'267'542
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XOX------X--------X----------.png) 12'018'329'632'279
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OO------XOX------X--------X----------.png) 24'830'266'132'337
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------O------O----OOO-----XOX------X--------X----------.png) 4'299'939'608'419
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OOO-----XOX------X--------X----------.png) 7'194'534'490'319
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XOX------X------X------------.png) 13'231'963'683'912
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OO------XOX------X------X------------.png) 24'704'728'983'183
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------O------O----OOO-----XOX------X------X------------.png) 4'248'794'799'084
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OOO-----XOX------X------X------------.png) 7'212'401'946'340
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XOX------XOX-------O---------.png) 25'755'335'723'361
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------XOX------XOX-------O---------.png) 19'973'393'186'221
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------XOX-----XO-------OX----------.png) 53'323'518'992'455
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OO------XOX-----XO-------OX----------.png) 40'523'743'207'333
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OXOX---O-X--------X-----------.png) 19'735'696'760'479
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OXOX---O-X-------X------------.png) 19'309'103'853'333
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOOO-----XOX-----X-------X------------.png) 18'744'972'530'488
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OOO-----XOX-----X-------X------------.png) 7'227'806'359'285
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O---OOOO-----XOX-----X--X-----------------.png) 17'604'272'090'068
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O-----OOO------XOX-----X--X-----------------.png) 21'092'446'057'101
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-----O-O------OO------XOX-----X--X-----------------.png) 12'865'682'410'479
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------XOX-----XXO-------X----------.png) 57'650'587'577'924
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OO------XOX-----XXO-------X----------.png) 31'562'343'497'146
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOOO-----XOX----XO--------------------.png) 34'364'027'689'947
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------XOX----XOOO------------------.png) 48'948'614'198'815
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OOOO-----XOX----XO--------------------.png) 34'268'381'439'388
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OOO-----XOX----XO--------------------.png) 24'197'700'740'610
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XOX----XO------OX------------.png) 28'795'996'235'399
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XOX----XO------XO------------.png) 48'478'086'524'267
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XOX---OXO-----X--------------.png) 23'329'815'165'314
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O---OOOO-----XOX----X---X-----------------.png) 11'789'655'875'412
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOO-----XOX----X---X-----------------.png) 16'780'532'216'953
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO----XOX----X---X-----------------.png) 13'426'467'895'045
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OOOO----XOX----X---X-----------------.png) 10'768'925'246'497
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------OO------OO------XOX----X---X-----------------.png) 10'474'323'702'626
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-----O-O------OO------XOX----X---X-----------------.png) 4'260'221'671'964
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OOOO----XOX----X--X------------------.png) 17'865'454'877'033
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XOX----XO-X-------X----------.png) 31'147'722'681'889
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OXOX----X--X-------X----------.png) 26'707'449'616'183
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------XOX----XO-X-------X----------.png) 26'523'036'078'590
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO-----OXOX----X--X-------X----------.png) 20'872'449'446'655
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XOX----XOX-----O-------------.png) 38'083'230'962'196
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XOX----XXO-------O-----------.png) 67'709'841'366'304
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------XOX----XX-O-----X------------.png) 20'966'178'981'930
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------XOX----XX-O----X-------------.png) 25'598'664'466'246
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XOXX-----OO------O-----------.png) 56'531'449'591'535
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OOO-----XOXX------O------------------.png) 18'206'077'222'251
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOOO-----XX-O------X------------------.png) 21'632'968'273'275
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-O--OOOOO-----XX--------X------------------.png) 12'841'884'311'093
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO-----OOO-----OXX--------X------------------.png) 47'431'629'336'521
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO----OOOO------XX--------X------------------.png) 35'040'310'902'208
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXO------OX-----O--X---------.png) 53'067'209'734'656
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOOO-----XXO-------X--------X---------.png) 31'040'867'275'853
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXO------OXX----O------------.png) 72'528'995'778'089
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOOO-----XXO------XO------------------.png) 67'941'862'276'663
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O---OOOOO-----XXO------X-------------------.png) 62'039'085'509'984
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOOO-----XX-O-----X-------------------.png) 20'006'051'840'237
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-O--OOOOO-----XX-------X-------------------.png) 19'738'104'590'847
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO---OOOO------XX-------X-------------------.png) 41'428'505'383'184
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OOOO----XX-------X-------------------.png) 38'797'150'656'631
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-------O-----OOOOO---XX-------X-------------------.png) 6'721'389'188'898
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-------O---OOOOO-----XX-------X-------------------.png) 21'104'535'193'425
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OOOOO---XX-------X-------------------.png) 6'316'903'698'042
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O----OOOOO-----XX-------X-------------------.png) 22'326'343'669'825
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OOOOO---XX-------X-------------------.png) 7'668'299'557'402
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O----OOOOO-----XX-------X-------------------.png) 19'249'343'537'465
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXO------XO-------OX---------.png) 75'817'169'581'926
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXO------XO-------XO---------.png) 59'350'010'305'190
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXO------XOX-------O---------.png) 55'707'031'996'489
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXO------XOX------O----------.png) 87'948'526'208'432
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXO------XXO--------O--------.png) 32'798'837'735'687
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOOO-----XX------OXX------------------.png) 40'661'992'601'614
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O---OOOO-----OXX-------XX------------------.png) 44'252'344'906'749
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO------XXO------XXO--------O--------.png) 32'630'618'697'715
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XX-----O-XX------------------.png) 21'356'392'170'276
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XX-------XX--------X---------.png) 17'557'574'208'627
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXOO-----XX-------X----------.png) 66'703'985'061'234
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------XX------OXX----O--X----------.png) 39'578'184'879'683
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO------XXOO-----XX-------X----------.png) 62'961'034'299'101
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XX-------XXX-----X-------X---.png) 2'835'334'412'769
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O---OOOO-----OXX------X-X------------------.png) 51'130'711'264'352
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XX-----OX-X------------------.png) 18'980'642'918'275
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOOO----OXX------X-X------------------.png) 80'596'843'975'773
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OOOO----OXX------X-X------------------.png) 61'230'986'721'678
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O-----OOO------XXO-----X-X------------------.png) 40'616'420'313'722
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOO-----XXO-----XX-------------------.png) 99'122'431'054'178
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------XXO-----XX-O------X----------.png) 48'499'900'179'926
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-O----XXO-----XX--------X----------.png) 31'671'844'080'863
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOOOO----XX------XX--------X----------.png) 20'180'754'542'411
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OO------XXO-----XX-O------X----------.png) 36'692'842'420'325
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OOOO----XX------XX--------X----------.png) 14'957'466'883'103
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------XXO-----XX-O-----X-----------.png) 37'376'130'653'817
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-O----XXO-----XX-------X-----------.png) 37'640'108'669'315
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------XXO-----XXXO-----------------.png) 73'018'662'920'670
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OXX-----OXXX------------------.png) 114'985'790'369'147
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-O----XXO-----XXX------------------.png) 56'105'552'132'130
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOO------XX-----OXXX------------------.png) 28'098'832'431'163
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------XX------XXX------OX----------.png) 49'035'950'008'014
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O---OOOO-----XXO----X--X------------------.png) 38'186'054'999'522
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOO-----XXO----X--X------------------.png) 58'016'846'012'217
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O-----OOO------XXO----X--X------------------.png) 35'068'195'040'475
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXOX-----XOO-----------------.png) 89'668'497'719'464
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOOO----OXXX-----O--------------------.png) 67'449'657'759'432
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O---OOOO-----OXXX-----O--------------------.png) 51'648'283'487'127
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOOO-----XXXO-------------------------.png) 33'673'484'220'333
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-O--OOOOO-----XXX--------------------------.png) 26'431'255'946'769
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OOOO----XXX--------------------------.png) 63'718'723'701'582
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO-----OOO-----OXXX--------------------------.png) 80'333'218'897'140
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO----OOOO------XXX--------------------------.png) 58'191'001'318'151
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OOOOO---XXX--------------------------.png) 12'398'080'337'815
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O----OOOOO-----XXX--------------------------.png) 30'580'694'750'273
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OOOOO---XXX--------------------------.png) 15'203'753'944'264
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O----OOOOO-----XXX--------------------------.png) 26'687'250'782'943
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------O------O------O----OOOO------XXX--------------------------.png) 8'067'047'873'832
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OO-----OXXX---O----X-----------------.png) 10'127'488'230'195
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XXX------OX------------------.png) 64'408'067'657'178
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XXX-------X--------X---------.png) 15'521'232'893'919
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXX------OXX-----O-----------.png) 81'787'269'790'566
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXXO-----XO-O----------------.png) 29'274'051'770'379
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OXXX---O-OX-------------------.png) 60'010'511'486'212
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-O---XXXO-----XO------------------.png) 30'994'892'643'772
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOOOO---XXX------XO------------------.png) 28'791'316'985'349
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OOO----OXXX-----OX-------------------.png) 61'474'238'399'369
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOOO-----XXX-----OX-------------------.png) 57'554'233'557'844
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O---OOOO------XXX-----OX-------------------.png) 48'269'895'482'800
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XXX------XO------------------.png) 63'666'582'206'340
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XXX----O-X-------------------.png) 28'834'738'853'486
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------XXX-----OX-----O--X----------.png) 37'688'908'782'875
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OXXX----O-X--------X----------.png) 39'434'139'978'041
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OXXX---O--X--------X----------.png) 26'128'001'170'201
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OO-----OXXX---O--X--------X----------.png) 8'837'340'446'290
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----OXXX---O-XO-------------------.png) 108'374'029'906'386
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XXX----OX--------------------.png) 31'598'449'599'474
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO-----OXXX-----X--------------------.png) 64'604'392'668'325
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOOO----OXXX-----X--------------------.png) 112'857'526'110'986
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----OOO-----OXXX-----X--------------------.png) 72'658'691'018'925
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXX---OOX-------X------------.png) 37'277'311'020'698
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OXXX---O-X-------X------------.png) 33'691'687'544'368
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OOO----OXXX-----X-------X------------.png) 39'524'391'475'704
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O---OOOO------XXX-----X-------X------------.png) 14'684'991'686'302
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OOOO-----XXX-----X-------X------------.png) 25'227'515'670'116
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXX---OOX------X-------------.png) 60'088'060'446'503
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----OXXX---O-X------X-------------.png) 49'858'222'598'687
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OOO----OXXX-----X------X-------------.png) 35'738'167'977'015
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO-----OXXX---O-X------X-------------.png) 28'552'226'611'439
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOO-----XXX-----X--X-----------------.png) 44'770'240'525'581
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO------XXX----OXX------X------------.png) 49'284'583'248'591
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO----XXX----X--O------------------.png) 41'755'127'490'924
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO----XXX----X--X------------------.png) 39'927'054'168'593
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------OOOOO-----XXXX------O------------------.png) 59'584'848'029'079
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO------XXXX-------O-----------------.png) 26'712'106'487'559
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOO-----XXXX----X--------------------.png) 53'714'147'703'798
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OO-----OXXXX----X--------------------.png) 23'316'108'292'966
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O-----OOO------XXXX----X--------------------.png) 17'828'599'642'383
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O---OOOO-----XXXX---X---------------------.png) 24'260'909'023'247
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOO-----XXXX---X---------------------.png) 41'746'251'998'285
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO----XXXX---X---------------------.png) 38'051'507'424'818
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OO------XXXX---X---------------------.png) 20'691'692'276'426
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OOOO----XXXX---X---------------------.png) 24'128'049'012'577
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OO------XXXX---X---------------------.png) 17'399'272'193'953
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OO-----OXXXX---X---------------------.png) 20'902'388'641'921
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O-----OOO------XXXX---X---------------------.png) 13'217'067'767'954
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------OO------OO------XXXX---X---------------------.png) 17'988'954'918'976
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-----XXXXX-----X-------X----------.png) 3'305'520'761'158
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----XOOX-----O-------O-------O----.png) 11'767'088'943'228
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----XOOX-----O-------OX-----------.png) 30'619'007'839'750
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XOOX------XO------X-----------.png) 91'759'597'851'690
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XOOX------XO-----X------------.png) 64'522'194'734'977
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XOXX------O--------O--------O-.png) 16'540'610'938'227
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XOXX-----OO------O------------.png) 73'417'392'838'633
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O---OOOO----XOXX------O-------------------.png) 91'728'482'286'838
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO-----XOXX----OOO-------------------.png) 87'081'759'612'407
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------O--------O--------OOO-----XOXX------O-------------------.png) 15'566'269'657'177
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XOXX------O-------OX----------.png) 38'463'639'840'982
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XOXX------O-------XO----------.png) 38'479'117'388'006
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XOXX------O------X-O----------.png) 26'233'321'161'117
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----XOXX-----O------XO------------.png) 41'678'296'062'321
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO-----XOXX-----O------XO------------.png) 14'691'916'539'316
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----XOXX----OOX-------------------.png) 161'864'852'207'794
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XOXX-----OX--------X----------.png) 74'969'266'203'992
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OO-----XOXX-----OX--------X----------.png) 55'909'144'730'404
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OO-----XOXX----O-X--------X----------.png) 25'689'648'548'321
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO-----XOXX----O-X-------X-----------.png) 32'335'876'170'172
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO-----XOXX----O-X------X------------.png) 47'575'045'545'599
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO----XOXX----OX------X-------------.png) 57'255'021'879'846
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO-----XOXX----OX------X-------------.png) 13'365'248'654'848
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XOXX----X-O-----X-------------.png) 47'693'826'220'104
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO-----XOXX----X-O-----X-------------.png) 31'767'034'297'564
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XOXXX-----O-O-----------------.png) 37'996'083'375'907
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-O---XOXXX-----O-------------------.png) 39'120'103'474'357
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOO-----XXXX----O---------------------.png) 67'244'191'073'664
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O---OOOO----XXXX--------X-----------------.png) 31'900'826'238'378
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO---XXXX--------X-----------------.png) 36'585'441'786'847
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OOOO---XXXX--------X-----------------.png) 23'740'365'738'036
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O-----OOO-----XXXX--------X-----------------.png) 22'277'974'529'918
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO---XXXX-------X------------------.png) 50'526'727'656'636
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOO----XXXXX-------------------------.png) 55'416'029'066'598
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOOO---XXXXX-------------------------.png) 40'918'100'011'986
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOO-----XXXXX---X-------X-------------.png) 6'341'394'893'824
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOO-X---XOOX------X-------X----------.png) 11'142'270'865'822
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO--X---XOOX------X-------X----------.png) 10'959'546'741'151
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OO--X---XOOX------X-------X----------.png) 8'537'049'160'370
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOOX----OOX-----XX-----X-------------.png) 29'947'148'937'998
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OO-X----OOX-----XX-----X-------------.png) 35'014'217'490'742
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OO-X----OOX-----XX-----X-------------.png) 21'253'343'143'472
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOOX----XOX------OO------O-----------.png) 34'815'788'234'540
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OOOX----XXO------XOO-----------------.png) 67'182'158'469'027
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------O------O----OOOX----XX-X-----X-------------------.png) 5'758'192'436'250
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------O-----OOOX----XXX-X------------------------.png) 16'333'895'333'228
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-------O-----OOOX----XXX-X------------------------.png) 16'831'704'895'137
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------O------O----OOOX----XXXX-------------------------.png) 9'069'042'147'942
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OOO------XX--------X----------.png) 36'516'770'344'446
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OOOO----XX--------------------.png) 102'885'232'303'277
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----OOO----XX------X-------------.png) 25'685'643'398'320
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----OOO----XXX-------------------.png) 77'381'642'691'278
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----OOO---XXX--------------------.png) 27'401'824'849'529
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OOOX----X---X-----------------.png) 50'096'484'372'843
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOOX-----OX------XO--------O--------O-.png) 13'023'177'345'798
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----OXOO----X------X-------------.png) 38'936'753'784'931
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----OXO----OXX-------------------.png) 95'968'574'949'204
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----OOXO-----XX-------------------.png) 113'498'375'573'888
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOOX-----OX-----OXX--------X----------.png) 40'059'725'619'151
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OOX-----OX-----OXX--------X----------.png) 28'762'709'101'691
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----OOX-----OX------XXO----X-------------.png) 49'690'322'574'217
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----OXO-----XX-----X-------------.png) 58'415'063'904'187
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----OXO----XO-------O------------.png) 78'864'897'249'273
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----OOXO----X-X-------------------.png) 93'963'307'316'422
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----OOX-----OX-----XX------X-------------.png) 28'077'859'860'035
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----OOX-----OX-----XXX-------------------.png) 45'926'919'785'386
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX-----OX----XXX--------------------.png) 30'777'890'916'623
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----OXO---XXX--------------------.png) 48'316'460'135'587
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----OOX-----OX----XXX--------------------.png) 25'216'903'729'915
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------O-----OOX-----OXX-----X------X-------------.png) 20'732'882'571'612
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----OXX----XO-X------------------.png) 86'395'462'164'255
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----OXXX---XO--------------------.png) 76'485'725'070'988
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OOX-----XO-------O-------O-----------.png) 42'587'868'648'472
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----O-------O-----OOO------OOX-----XO---------------------------.png) 15'334'171'841'418
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOOX-----XOO------X-------------------.png) 98'405'123'136'559
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXO----O--X--------X----------.png) 35'736'382'123'645
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX---OOXO------XO-------------------.png) 84'369'650'343'473
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OOX-----XO------XO-------------------.png) 82'967'235'798'651
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOOX-----XO------XO-------OX----------.png) 55'665'206'355'258
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OOX-----XO------XO-------OX----------.png) 50'593'066'432'616
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOOX-----XO------XXO-------X----------.png) 50'960'327'480'621
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX-----XO------XX--------X----------.png) 49'404'276'900'799
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX-----XO------XX--------X----------.png) 50'313'003'207'525
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OOX-----XO------XXO-------X----------.png) 37'795'180'209'749
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--O-----OOX-----XO------XX--------X----------.png) 38'520'952'767'383
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O------OOX-----XO------XX--------X----------.png) 38'847'580'839'071
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX---OOXO-----X-O-------------------.png) 87'582'960'629'184
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XOO----X---O--------O--------.png) 14'375'269'916'208
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OOX-----XO-----X-O-------------------.png) 71'485'357'283'571
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-O--------O--------O-------OOX-----XOO----X---------------------.png) 14'443'742'907'508
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXOO----XX--------------------.png) 131'740'827'731'942
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OOX-----XO-X-----XO------------------.png) 51'121'930'847'233
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OOX-----XOX------O-------------------.png) 94'337'880'795'332
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XOX----X--O--------O---------.png) 32'327'599'080'531
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OO------OOX-----XOX----X---X-----------------.png) 25'877'870'671'345
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O------OOX-----XOX----X---X-----------------.png) 22'027'879'942'177
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XOX----X-OX------------------.png) 78'146'932'029'709
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O------OOX-----XOX----X--X------------------.png) 34'749'672'679'124
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XOXX---X--O------------------.png) 56'701'197'504'459
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XOXX---X-O-------------------.png) 55'459'172'547'803
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OOX-----XXO--------O-----------------.png) 62'815'637'281'045
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXX----O--OX------------------.png) 72'808'502'506'814
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----OXXO---O--X-------------------.png) 85'576'664'606'553
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O---OOOOX-----XX-------X-------------------.png) 41'601'474'457'820
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OOX-----XXO------X-------------------.png) 124'407'728'151'357
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX----OXX-----OX--------------------.png) 106'514'776'598'499
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXX----O-XO-------------------.png) 103'025'325'348'565
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOOX-----XXO-----X--------------------.png) 58'583'592'255'339
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O---OOOOX-----XX------X--------------------.png) 33'558'689'353'425
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OOX-----XXO-----X--------------------.png) 83'546'503'593'382
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OOX----OXX------X--------------------.png) 86'351'976'751'673
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OOX----OXX------X--------------------.png) 87'846'070'922'454
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------OO------OOX----OXX------X--------------------.png) 66'506'040'402'732
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX-----XX------XXX------------------.png) 42'343'505'779'892
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXX------XXX------------------.png) 76'951'135'762'013
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX-----XX------XXX------------------.png) 52'191'884'086'858
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XXO----X--OO-----------------.png) 50'202'319'899'590
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O----O--O----OOXO----XX-----X---------------------.png) 11'205'274'555'126
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XXO----X--XO-----------------.png) 48'457'344'896'863
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XXO----X-XO------------------.png) 117'647'131'130'564
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OO-------OOX-----XXO----X-X-------------------.png) 83'032'821'245'100
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX-----XXO----XX--------------------.png) 98'579'253'962'540
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XXO----XX-O------------------.png) 61'850'425'596'701
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOOX-----XXO----XX--------------------.png) 71'753'345'307'360
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OO-------OOX-----XXO----XX--------------------.png) 57'535'598'338'449
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XXO----XX-----X--------------.png) 32'057'502'951'234
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOOX-----XX-X----X--------------------.png) 28'919'485'614'839
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O-----OOOX-----XX-X----X--------------------.png) 24'755'549'194'739
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX-----XXOX---X---O-----------------.png) 41'856'642'862'261
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OOX-----XX-X---X---------------------.png) 34'248'037'288'291
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OOX-----XX-X---X---------------------.png) 20'611'565'023'197
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------OO------OOX-----XX-X---X---------------------.png) 18'920'411'091'839
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXXX---O--O-------------------.png) 64'660'673'622'967
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------OO----OOXO----XXX--------------------------.png) 34'253'154'751'124
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXXX---O----X-----------------.png) 31'482'599'449'105
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----OXXX---O---X------------------.png) 42'701'181'975'890
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXXX-----XO-------------------.png) 167'873'398'547'499
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------O----OOOX-----XXX-----X--------------------.png) 27'246'632'525'903
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX-----XXX-----X--X-----------------.png) 30'552'610'727'452
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXXX-----X--X-----------------.png) 55'754'443'911'935
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX-----XXX-----X--X-----------------.png) 32'439'864'124'884
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX-----XXX-----X-X------------------.png) 37'281'895'887'531
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOOX-----XXX-----X-X------------------.png) 36'595'128'762'810
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXXX----X--X------------------.png) 51'202'079'438'265
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX-----XXX----X--X------------------.png) 36'888'962'515'118
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOOX-----XXX----X--X------------------.png) 34'064'208'696'823
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----OXXXX--O----------------------.png) 35'325'767'661'942
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOOX-----XXXX----X--------------------.png) 35'260'771'552'857
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OOX----OXXXX---X---------------------.png) 46'570'123'423'449
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX-----XXXX---X---------------------.png) 33'572'449'359'665
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOOX-----XXXX---X---------------------.png) 32'658'282'146'123
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOOO-----X--------X-----------.png) 33'423'199'441'612
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOOO-----X------X-------------.png) 32'804'885'654'635
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOOO----X-------X-------------.png) 53'154'501'205'286
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOOO---X-X--------------------.png) 36'576'725'814'913
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOOO---XX---------------------.png) 54'966'840'703'929
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OOX----XOX-----O---------------------.png) 62'558'398'431'909
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX----XOX-------OX------------------.png) 52'717'390'046'186
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX----XOX-------OX------------------.png) 60'437'479'195'757
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOXO-----OX-------------------.png) 131'734'281'667'150
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOXO----O-X-------------------.png) 72'071'730'204'293
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX----XOX------XO-------------------.png) 76'644'866'222'479
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX----XOX------XO-------------------.png) 99'474'349'262'053
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----OOX----XOX-----OX--------------------.png) 55'056'808'053'255
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----OOX----XOX------X--------X-----------.png) 14'121'911'162'711
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----OOX----XOX------X------X-------------.png) 13'920'760'075'200
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX----XOX-----X-------X-------------.png) 17'013'836'873'872
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----OOX----XOX-----X-------X-------------.png) 14'777'209'570'490
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX----XOXX------O-------------------.png) 83'975'610'240'123
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX----XOXX------O-------------------.png) 98'823'291'994'391
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOXX-----O-X------------------.png) 51'880'862'363'944
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOXX----O--X------------------.png) 33'598'773'644'771
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOXXX----O--------------------.png) 38'208'434'057'351
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XOXXX---O---------------------.png) 24'960'166'617'056
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXOO------O-------O-----------.png) 84'837'129'344'251
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OOX----XXO-------O-------------------.png) 92'429'013'075'238
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXOO------XO------------------.png) 134'699'950'365'013
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX----XXO-------X--------X----------.png) 70'708'721'184'132
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX----XXO-------X--------X----------.png) 94'296'230'279'279
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--O-----OOX----XXO-------X--------X----------.png) 37'561'051'177'542
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O------OOX----XXO-------X--------X----------.png) 52'883'425'262'758
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O------OOX----XXO------XO-------------------.png) 116'708'082'028'805
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXOX-------O--------O---------.png) 60'242'161'156'224
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O------OOX----XXOX------O-------------------.png) 98'516'939'324'280
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXOX------OX------------------.png) 124'081'673'128'496
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXOXX------O------------------.png) 89'919'884'283'119
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXOXX-----O-------------------.png) 79'211'651'139'161
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXXO--------O--------O--------.png) 15'327'452'795'722
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXXO-------OO-----------------.png) 57'223'798'224'380
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXXO------O------O------------.png) 64'806'619'407'884
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O---OOOOX----XXX---------------------------.png) 54'279'470'904'950
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O----O--O----OOXO---XXX---------------------------.png) 16'306'088'642'711
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-O--------O--------O-O-----OOX----XXX---------------------------.png) 10'378'281'710'738
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXXO-------XO-----------------.png) 49'096'602'142'894
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXXO------XO------------------.png) 128'001'347'808'177
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXXO-----X-O------------------.png) 61'908'541'732'893
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXXO----OX--------------------.png) 123'760'832'612'586
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXXO----XO--------------------.png) 153'496'369'402'593
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXXO----X------X--------------.png) 32'544'419'659'047
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX----XXXOX-------O-----------------.png) 38'607'696'031'629
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOOX----XXX-X-------------------------.png) 38'543'381'534'131
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O-----OOOX----XXX-X-------------------------.png) 36'375'432'825'045
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------O----OOOX----XXXX--------------------------.png) 31'386'777'868'284
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX----XXXX--------X-----------------.png) 33'596'615'327'042
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOOX----XXXX--------X-----------------.png) 46'740'995'715'825
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OOOX----XXXX-------X------------------.png) 38'249'789'812'771
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OOX---XXXXO---O----------------------.png) 59'311'905'272'351
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OOXX----XO-------O-------O-----------.png) 21'376'800'755'470
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OOXX----XOO-------O------------------.png) 66'592'104'850'951
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OOXX----XO-------O-------O-----------.png) 21'905'364'506'567
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OOXX----XO-------XO------------------.png) 35'727'763'970'563
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OOXX----XOX------O-------------------.png) 50'804'175'499'130
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OOXX----XOX------O-------------------.png) 49'603'466'219'167
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO------OOO----XX------X-----.png) 19'916'540'987'449
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO------OOO----XXX-----------.png) 55'245'996'638'635
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOOO----O------XXX-----------.png) 21'402'472'274'339
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOO-----OX-----XX------X-----.png) 16'273'851'540'285
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOO-----OX-----XXX-----------.png) 41'218'763'676'862
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO------OXXX---XO------------.png) 28'860'016'747'044
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOOO----XOO----X-------------.png) 45'272'074'321'990
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOOOO--O-X------X-------------.png) 34'657'424'266'574
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OOOOO----X------X-------------.png) 21'031'648'851'914
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OX------OO------XOO----X-------------.png) 19'928'820'399'025
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOOO----X-X----X--X----------.png) 30'044'250'648'738
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO------XOXX---X--O----------.png) 41'672'612'925'420
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO------XOXX---X-O-----------.png) 33'508'870'651'777
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO------XXO----X--OO---------.png) 25'270'910'834'063
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOO-----XXO----X--O----------.png) 57'044'737'867'016
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOOO----XXO----X-------------.png) 54'085'755'799'221
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOOO---O-XX-----X-------------.png) 69'209'970'706'685
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OOOO-----XX-----X-------------.png) 42'674'117'936'448
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO------XXO----X-XO----------.png) 51'947'445'808'712
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOO-----XX-----X-XO----------.png) 35'884'431'733'984
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO------XXOX---X---O---------.png) 15'884'863'729'082
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOOO----XX-X---X-------------.png) 23'694'250'896'888
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO-----XOOO-----X--------X---.png) 17'539'509'193'897
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO-----XOOO-----X------X-----.png) 18'965'198'470'220
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOO----XOO-----XO------------.png) 60'356'213'596'119
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOOO---XO------XO------------.png) 32'229'936'412'188
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOO----XOX------X--------X---.png) 10'520'874'518'409
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOO----XOX------X------X-----.png) 9'820'101'288'074
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO-----XOXO----XO------------.png) 44'987'212'554'325
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO-----XOXXX----O------------.png) 12'421'433'354'918
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOO-----XOXXX-----------------.png) 10'833'794'646'737
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOO----XXO-----XO------------.png) 77'754'334'278'862
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOOOO---XX------X-------------.png) 50'115'027'180'730
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOOO---OXXX-------------------.png) 83'001'230'489'638
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OOOO----XXX-------------------.png) 57'186'253'077'761
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OO-----XXXO----XO------------.png) 57'313'764'837'475
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOO-----XXXO----X-------------.png) 40'147'375'027'195
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOOO----XXX-----X-------------.png) 61'267'667'912'934
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOO-----XXXXX-----------------.png) 22'501'283'259'021
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOX-----O-O----XXX-----------.png) 24'470'937'559'411
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOXO----O--X---XO------------.png) 29'938'543'816'767
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOX-----O-X----XO-X----------.png) 28'894'654'638'008
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOX-----OX-X---XO------------.png) 29'199'754'452'435
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOXO----X--O---X---O---------.png) 15'071'119'101'082
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOX-----X-O----X--XO---------.png) 20'244'149'029'318
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOX-----XO-X---X--O----------.png) 62'262'837'385'388
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOX-----XO-X---X-O-----------.png) 54'416'488'848'692
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOX----XO-O-----O-------O----.png) 13'828'359'361'035
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX------OOX----XO-O------------------.png) 29'436'658'890'136
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OXO-----OOX----XO--------------------.png) 40'532'382'975'098
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OOX----XO-O----XO------------.png) 50'737'645'198'601
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OX-----OOOX----X---X-----------------.png) 12'161'504'200'765
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOOX----XO-X-------X----------.png) 23'674'392'703'752
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOOX----XX-O-----X------------.png) 56'617'431'933'132
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOOX----XX-O----X-------------.png) 61'414'703'930'396
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OXOO----OO-----XO------------.png) 40'363'440'269'230
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX------OO-----XX-O----X-----.png) 16'327'066'424'822
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX------OO-----XXXO----------.png) 41'236'002'896'633
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX------OX-----OX-----OX-----.png) 6'449'711'550'955
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX-----OOX----O-X------X-----.png) 20'898'843'403'405
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX----OOOX------X------X-----.png) 16'092'301'110'832
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX------OX-----XOOO----------.png) 35'774'933'449'323
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOX----O-OX-----XO------------.png) 38'914'720'056'830
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OOX------OX-----XO------------.png) 34'754'671'094'048
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX------OX-----XO------XO----.png) 9'602'059'716'134
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX------OX-----XOX------O----.png) 12'431'011'800'021
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX------OX-----XXO--------O--.png) 14'710'879'028'713
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX------OXX----XO-O----------.png) 41'762'013'611'505
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OXOO----XO-----X--O----------.png) 43'985'001'010'471
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-O----OXO-----XOO----X-------------.png) 59'574'044'058'905
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OXO-----OXOO----X------X-------------.png) 55'491'760'761'025
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOX------OX------X------XO------------.png) 30'071'949'522'469
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX----O-OX-----OXX-----XO------------.png) 33'556'406'814'270
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----O-OX------XX-----X-------------.png) 28'116'161'308'852
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX------OX------XX-----X-------------.png) 33'689'793'137'308
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OX------OX------XX-----X-------------.png) 59'847'598'980'974
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OOX------XX-----X-------------.png) 43'993'520'819'695
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX------OX------XX-----X-------------.png) 24'478'568'046'148
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX------OX------XX-----X-------------.png) 48'252'038'343'170
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OOX------OX------XX-----X-------------.png) 28'014'443'366'549
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OO-------OOX------OX------XX-----X-------------.png) 25'423'126'040'653
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------OX------OX------XX-----X-------------.png) 24'431'406'219'383
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OXO-----OX------XX-----X-------------.png) 37'071'993'089'890
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------OO-----OX------OX------XX-----X-------------.png) 37'479'404'591'695
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OXO-----OX------XX-----X-------------.png) 41'232'758'679'099
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX------OX------XX-----X-------------.png) 20'643'899'674'324
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------OO-------OX------OX------XX-----X-------------.png) 15'634'558'611'457
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX-----XOO------X-O------X---.png) 32'308'894'452'232
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX-----XOO------X-O----X-----.png) 24'570'090'956'471
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX-----XOO-----XO-O----------.png) 37'858'919'348'137
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OX----OOOX-----X-------X-------------.png) 14'600'785'381'639
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----OOOX-----X--X------------------.png) 27'006'617'589'523
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OX-----OOXO----X--X------------------.png) 42'191'240'343'830
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----OOX-----XO-X------------------.png) 45'187'155'445'885
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOX----OXOX------O------------.png) 48'551'436'678'586
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OOX-----XOX------O------------.png) 46'540'820'830'019
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OX-----OOXO----X-X-------------------.png) 32'939'666'846'090
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----OOX-----XOX-------------------.png) 49'436'443'459'660
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX-----XOX------O-------OX---.png) 9'465'213'803'794
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX-----XOX------O------XO----.png) 9'331'957'745'367
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OX-----XXO-----XO-O----------.png) 37'478'204'234'160
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOX------OX-----XXO-----X--O----------.png) 29'343'615'101'806
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX------OX-----XX------X-------------.png) 34'576'623'112'624
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX------OX-----XXX-------------------.png) 42'078'192'623'539
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----OOOX----X---X------------------.png) 33'172'712'639'478
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX----OOOX----X---X------------------.png) 21'121'309'450'980
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX----OOOX----X--X-------------------.png) 32'010'836'755'892
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOX------OX----XXX--------------------.png) 21'922'521'010'190
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX------OX----XXX--------------------.png) 30'422'300'545'596
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OXX-----OOO----XO------------.png) 69'341'316'787'467
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OXX----OOOO----X-------------.png) 81'164'872'513'491
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OXX---OOO------XO------------.png) 27'886'637'479'393
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OOXX---O-O------XO------------.png) 23'494'548'299'531
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OOXX-----O------XO------------.png) 20'044'291'185'154
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OXX-----O------XOX------O----.png) 6'194'221'993'505
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OXX-----O------XXO--------O--.png) 5'685'064'778'706
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OXX-----OXO----XO------------.png) 66'145'541'031'775
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OXX-----XOO----X--O----------.png) 79'551'670'063'508
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----O-OXX-----X------X-------------.png) 23'895'972'908'309
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX------OXX-----X------X-------------.png) 26'797'685'418'493
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OX------OXX-----X------X-------------.png) 56'881'781'053'081
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OOXX-----X------X-------------.png) 32'266'959'344'993
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX------OXX-----X------X-------------.png) 19'576'387'615'236
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX------OXX-----X------X-------------.png) 50'707'891'141'880
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OOX------OXX-----X------X-------------.png) 25'094'975'942'245
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OO-------OOX------OXX-----X------X-------------.png) 23'853'601'855'800
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------OX------OXX-----X------X-------------.png) 21'526'009'030'453
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OXO-----OXX-----X------X-------------.png) 56'208'978'860'334
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------OO-----OX------OXX-----X------X-------------.png) 34'003'526'571'209
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OXO-----OXX-----X------X-------------.png) 58'803'063'287'938
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX------OXX-----X------X-------------.png) 18'615'942'712'477
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------OO-------OX------OXX-----X------X-------------.png) 14'964'466'693'038
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOX------OXX----XOOO------------------.png) 101'707'553'389'108
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OOX------OXX----XO--------------------.png) 47'607'253'502'562
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------OXX----XOXO-----O------------.png) 83'993'401'342'508
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXO----OOOOO------------------.png) 27'092'242'393'047
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOOO------O-------XXX--------.png) 7'231'300'179'799
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-------OOOO----X------X----.png) 5'652'976'145'670
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO----OOOOO----X-------------.png) 60'873'168'174'082
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-------OOX-----X-O----X----.png) 14'462'109'089'210
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-------OXX-----O------XO---.png) 9'534'726'971'906
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-------XOOO------X-------X-.png) 3'140'457'578'972
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOOO-----XO-------XO---------.png) 24'305'909'011'365
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXO----O-OXO-------X----------.png) 26'143'533'142'040
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXO------OXO-------X----------.png) 28'117'142'753'309
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-------XOX-----OOO---------.png) 12'484'501'512'775
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-------XOX-------O-------XO.png) 1'608'623'412'737
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-O-----XOX-----OX----------.png) 15'010'008'528'477
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-------XOX-----X-O-----X---.png) 4'344'297'083'689
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO------OXXX---O-O-----------.png) 22'269'654'312'679
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXO-----O-XXX---O-------------.png) 18'771'437'536'636
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OOO----OX------XO-------XXX-----------------.png) 16'412'671'939'912
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXO-------XXX-----------------.png) 34'846'415'229'503
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX------XO-------XXX-----------------.png) 16'112'545'431'538
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-------O-----OXO-----XO-------XXX-----------------.png) 19'651'031'950'735
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OXO-----XO-------XXX-----------------.png) 15'307'805'021'146
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OXO-----XO-------XXX-----------------.png) 18'611'941'560'302
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX------XO-------XXX-----------------.png) 15'175'059'320'334
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXO------X-O--------O---------.png) 28'103'860'226'466
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXO----O-XOO-----X------------.png) 51'337'856'134'357
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXO------X-------XO-----------.png) 48'924'758'168'912
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXO------X------OX------------.png) 42'900'481'277'451
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OX------XO------XOO-----X------------.png) 20'341'733'297'407
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OX------XOOO----X-------X------------.png) 9'683'872'957'572
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXOO-----X-X------------------.png) 106'317'182'185'430
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXO------XXO------------------.png) 69'756'547'224'123
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXOO-----XX-------------------.png) 102'641'099'868'730
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXO----O-XXO-----X------------.png) 30'748'729'440'918
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXO------XXO-----X------------.png) 31'237'292'908'782
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OX------XOO-----XX------X------------.png) 19'533'237'242'929
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OXO-----XO------XX------X------------.png) 10'052'093'996'055
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXO----O-XXO----X-------------.png) 49'484'725'327'787
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXO------XXO----X-------------.png) 33'361'806'545'605
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO------XXOX-----O-O---------.png) 23'548'889'403'728
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-O----XXOX-----O-----------.png) 26'066'074'726'068
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOOO---XO------O------O------.png) 9'667'853'379'400
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXO-----X--O--------O---------.png) 19'019'064'847'242
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----OXO-----X--O--------O---------.png) 9'906'870'166'661
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOOO---XO-X-------X----------.png) 39'507'991'728'958
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXOOO---X--X-------X----------.png) 35'391'504'696'946
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXO-----X-OXX-----O-----------.png) 40'399'139'443'823
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-----XOXO----O------O------.png) 11'322'730'323'881
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOO----XOX-----O------O------.png) 26'333'127'541'022
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----OXO-----X-XO------------------.png) 29'402'197'919'678
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXO-----X-XOX-------O---------.png) 14'030'257'547'624
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-----XOXXX---O-------------.png) 17'847'219'008'290
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----OOXO-----XX--------------------.png) 81'856'385'519'179
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OX-----OXOO----XX--------------------.png) 60'826'516'185'667
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOOO---XX-O-----X------------.png) 24'111'715'016'690
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-----XXOO----X--O----------.png) 39'824'617'447'043
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-----XXOO----X-O-----------.png) 45'613'455'658'899
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOO----XXO-----X-O-----------.png) 69'393'369'624'972
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOOO---XX-O----X-------------.png) 26'512'433'381'494
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-----XXOXX-----O-----------.png) 43'862'909'922'263
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXO-----XXXO------------------.png) 40'790'303'719'464
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-------O-----OXO-----XO-----XXX-------------------.png) 33'858'262'040'764
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OXO-----XO-----XXX-------------------.png) 26'083'763'659'863
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OXO-----XO-----XXX-------------------.png) 26'610'210'633'024
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OX------XOO----XXX-------------------.png) 23'123'253'886'003
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OXO-----XO-----XXX-------------------.png) 12'423'471'675'246
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-----XXXO----XO------------.png) 56'174'464'009'957
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XO-----XXXOX-------O---------.png) 12'376'759'021'518
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----OOXO----X-X--------------------.png) 59'801'366'171'416
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXOX------XO------------------.png) 58'940'341'530'533
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXOX-----X-O------------------.png) 71'059'216'052'101
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXOX---O-X-O------X-----------.png) 34'511'802'655'156
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOX---OOX-O-----X------------.png) 35'579'070'216'130
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXOX---O-X-O-----X------------.png) 21'942'284'137'243
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXOX-----X-O-----X------------.png) 23'255'169'742'556
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OXO-----XOX-----X-------X------------.png) 12'574'189'141'019
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOX---OOX-O----X-------------.png) 68'780'832'553'129
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXOX---O-X-O----X-------------.png) 36'096'022'447'207
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXOX-----X-O----X-------------.png) 23'957'991'776'617
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O---O----OXO-----XOX-----X--X-----------------.png) 14'885'206'770'444
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O----O-O------OX------XOX-----X--X-----------------.png) 11'865'448'879'849
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOX----XO-O----O------O------.png) 13'636'245'017'072
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OXO-----XOX----XO--------------------.png) 35'157'221'896'044
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OXO-----XOX----XO--------------------.png) 32'651'646'422'725
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------O--------OXO-----XOX----XO--------------------.png) 22'597'318'352'346
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOX----XO-O-------XO---------.png) 16'226'301'480'892
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXOX----X--O-------XO---------.png) 13'754'643'616'971
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOX----XO-O----OX------------.png) 28'084'040'697'309
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOX----XO-O----XO------------.png) 48'323'583'632'825
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XOX---OXO-O---X--------------.png) 19'122'798'629'374
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O--O----OXO-----XOX----X---X-----------------.png) 16'758'584'328'088
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OX------XOX----X---X-----------------.png) 22'614'934'247'260
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O---O----OXO-----XOX----X---X-----------------.png) 10'854'893'124'761
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--O-----OXO-----XOX----X---X-----------------.png) 18'489'680'197'797
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX------XOX----X---X-----------------.png) 12'634'359'745'844
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O----O-O------OX------XOX----X---X-----------------.png) 4'306'591'064'858
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O---O----OXO-----XOX----X--X------------------.png) 15'973'912'843'896
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XX----OOOO-----X--O----------.png) 43'581'254'798'301
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OOO--OOOX------XX--------X------------------.png) 17'535'264'436'340
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXOO-----OX-----O-X----------.png) 54'272'264'203'888
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXOO-----XO-------O-------O--.png) 24'468'239'032'312
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXX----OOOX------O------------.png) 58'296'227'258'301
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX----OOXX----O-OX-------------------.png) 18'602'681'618'085
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX-----OXX------OX-------------------.png) 83'793'218'325'503
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXX------OX-------O-----------.png) 66'497'909'537'777
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXX-----O-X-----O-------------.png) 34'390'844'167'574
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXX-----OOX-------------------.png) 111'017'079'866'212
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX-----OXX------OX-------------------.png) 59'889'149'846'563
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OXO-----XX-O-----X-------------------.png) 37'054'824'630'573
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO-----OOX-----OXX-------X-------------------.png) 87'311'250'830'368
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOOO-----OXO-----XX-------X-------------------.png) 80'872'548'640'125
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOOOO----OX------XX-------X-------------------.png) 31'967'457'888'788
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-------O-----OXO-----XXO------XO------------------.png) 53'898'797'577'895
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OXO-----XXO------XO------------------.png) 58'467'475'071'517
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OXO-----XXO------XO------------------.png) 58'797'471'376'986
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----OXX-----O-X-----O-------------.png) 23'721'807'723'436
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO-----OOXO-----XX-------X-------------------.png) 67'777'898'663'268
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OOO------OXO-----XX-------X-------------------.png) 41'040'560'795'032
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O----OOOO-------OX------XX-------X-------------------.png) 6'740'384'031'604
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------OOO------O------OXO-----XX-------X-------------------.png) 8'012'381'882'847
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------O------O------O----OOOX------XX-------X-------------------.png) 5'195'176'346'794
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--O-------O-------O-------OOX-----OXX-------X-------------------.png) 12'602'721'760'849
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--O-------O-------O------OOOX------XX-------X-------------------.png) 6'291'073'225'888
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXOO-----XO------OX----------.png) 54'972'561'946'752
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXX----O-OX------XO-----------.png) 30'750'979'167'072
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXX------OX------XO-----------.png) 33'811'612'133'748
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXX----O-OX-----X-O-----------.png) 34'462'801'939'766
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXX----O-OX-----XO------------.png) 41'069'016'267'539
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXX------OX-----X-O-----------.png) 25'253'297'585'667
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXX------OX-----XO------------.png) 35'368'498'468'903
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOX-----OXX-------XX------------------.png) 43'618'415'174'734
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----OOXX-------XX------------------.png) 39'683'258'848'530
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX-----OXX-------XX------------------.png) 45'392'650'932'913
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----OOX-----OXX-------XX------------------.png) 47'723'883'920'167
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OO------OOX-----OXX-------XX------------------.png) 54'406'878'001'488
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OXO-----XX-------XXX-----------------.png) 13'117'767'319'277
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OXO-----XX-------XXX-----------------.png) 13'812'404'860'945
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OXO-----XX-O----X--------------------.png) 43'358'375'059'511
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-------O-----OXO-----XXO-----X-O------------------.png) 40'315'132'928'551
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OX----OOXX-----OX--------------------.png) 47'758'786'577'524
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOX-----OXX-----OX--------------------.png) 65'611'808'378'882
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------OO----OOXO-----XX------X--------------------.png) 62'884'750'208'963
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXX----O-XO-----X--O----------.png) 47'388'502'655'821
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----OOX-----OXX------X-X------------------.png) 48'595'036'829'742
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--O-----OOX-----OXX------X-X------------------.png) 34'160'290'800'334
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXX----O-XX-----O--------O----.png) 7'168'643'895'549
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXX----OOXX-----O-------------.png) 50'385'334'646'263
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXX-----OXX-----O-------------.png) 47'362'707'214'478
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX-----OXX------XX-------------------.png) 59'845'295'114'418
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOX------XX------XXO------------------.png) 35'365'940'431'712
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O----O-O------OX------XXO-----XX-------------------.png) 26'979'874'670'830
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX-----OXX------XX-------------------.png) 31'954'136'751'616
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOX------XX------XX--------X----------.png) 13'629'409'143'605
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O----O-O------OX------XX------XX--------X----------.png) 7'090'496'264'164
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXX----O-XXO------X-----------.png) 34'289'306'698'510
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX----O-XX-----OXX-----XO------------.png) 27'404'453'468'785
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOX------XX------XXX------------------.png) 18'863'186'631'928
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-O----XXO----XOOO------------------.png) 77'695'548'206'777
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----OXO-----XXO----X--O------------------.png) 37'683'192'429'548
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OXO-----XX-O---X---------------------.png) 47'931'317'327'342
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OXO-----XXO----X---------------------.png) 88'273'712'639'126
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OXOO----XX-----X---------------------.png) 52'114'903'991'906
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOOO----OX------XXO----X---------------------.png) 32'757'762'254'990
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOOO----OXO-----XX-----X---------------------.png) 47'591'994'422'198
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOOOO---OX------XX-----X---------------------.png) 11'290'966'244'180
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOX------XX-----XO-------O------------.png) 38'253'627'508'522
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----O-O-----OXO-----XXO----X---------------------.png) 28'946'054'713'367
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----O-O-----OXOO----XX-----X---------------------.png) 11'997'025'631'425
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OXOO----XX-----X---------------------.png) 25'970'221'984'766
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OOO-----OXO-----XX-----X---------------------.png) 54'328'295'252'992
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------O-O-----OXOO----XX-----X---------------------.png) 11'221'700'792'834
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OXOO----XX-----X---------------------.png) 27'870'954'591'875
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OX----OOXX-----X------X--------------.png) 12'237'076'374'805
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOX-----OXX-----X------X--------------.png) 19'927'588'586'397
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----OOX-----OXX-----X--X------------------.png) 42'673'274'183'710
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX-----OXX-----X--X------------------.png) 44'823'118'585'951
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--O-----OOX-----OXX-----X--X------------------.png) 26'557'319'458'324
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OX-----OXX-----X--X------------------.png) 37'508'218'425'321
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXX----OXOX-------O-----------.png) 36'438'631'121'397
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXX-----XOX-------O-----------.png) 32'618'227'404'254
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXX-----XOX------O------------.png) 45'385'151'301'766
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OX------XX-----X-XO------------------.png) 48'528'601'270'106
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--O-----OXO-----XXO----X-X-------------------.png) 48'562'962'856'941
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX-----OXX-----X-X-------------------.png) 46'811'266'223'334
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX------XX-----X-XO------------------.png) 30'540'696'321'820
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O----O-O------OX------XXO----X-X-------------------.png) 18'450'585'039'380
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OX-----OXX-----X-X-------------------.png) 36'445'037'442'681
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX-----OXX-----X-X-------------------.png) 21'014'311'851'928
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--O-----OXO-----XXO----XX--------------------.png) 52'582'606'311'081
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOX------XX-----XXO-------------------.png) 34'952'926'739'543
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXO----XXO-----XO------------.png) 81'832'341'215'791
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OX------XX-----XX-----X--------------.png) 22'953'646'089'166
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX------XX-----XX-----X--------------.png) 13'900'560'248'805
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XX-----XXX----OOO------------.png) 23'571'701'603'904
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----O-XX-----XXX-------------------.png) 19'576'357'249'749
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX------XX-----XXX-------------------.png) 17'033'157'392'208
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXX-----XXX-------------------.png) 41'159'595'883'461
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX------XX-----XXX-------------------.png) 10'152'759'908'413
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX------XX-----XXX-------------------.png) 31'339'501'915'646
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------OX------XX-----XXX-------------------.png) 14'733'956'629'286
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-------O-----OXO-----XX-----XXX-------------------.png) 18'273'545'348'061
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O------OXO-----XX-----XXX-------------------.png) 23'166'475'480'455
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O--------O------OXO-----XX-----XXX-------------------.png) 27'096'204'355'422
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX------XX-----XXX-------------------.png) 11'013'088'498'086
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------OO-------OX------XX-----XXX-------------------.png) 8'461'954'917'100
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXX----XO-X-------------------.png) 69'417'910'778'266
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX---OOOO------X------------.png) 52'856'468'459'544
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXXX---O-O-------XO-----------.png) 10'099'647'088'132
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXXX-----O-------XO-----------.png) 11'260'081'156'933
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX---OOO------XO------------.png) 29'573'143'775'380
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX---OOOO-----X-------------.png) 70'611'182'113'452
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXXX---O-O------X-O-----------.png) 11'276'956'033'758
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXXX---O-O------XO------------.png) 15'629'355'138'355
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX----O-XXX----OO------XO------------.png) 19'956'324'727'967
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXXX-----O------X-O-----------.png) 8'535'241'101'930
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXXX-----O------XO------------.png) 13'222'958'939'439
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX------XO-------OO------O--.png) 6'876'317'554'663
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX------XO------OOO---------.png) 21'212'529'004'070
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXXX---O-OXO------------------.png) 45'925'338'143'775
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX-----OXXX-----OXO------------------.png) 48'033'047'362'349
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----O-XXX-----OX-------------------.png) 37'532'915'830'233
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX------XXX-----OX-------------------.png) 39'048'138'407'805
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXXX------XO------------------.png) 63'467'443'607'670
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXXX-----OX-------------------.png) 74'432'929'214'984
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX------XXX------XO------------------.png) 26'389'709'132'794
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX------XXX-----OX-------------------.png) 27'808'021'328'300
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX---OOX-------O--------O---.png) 5'532'788'630'890
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX---OOX------O--------O----.png) 7'023'035'744'709
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX---OOX------O-------O-----.png) 9'012'464'365'547
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXXX---O-X------O--------O----.png) 4'895'129'866'008
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX-----OXXX-----X--------------------.png) 71'463'178'694'826
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------O-----OOX------XXX-----X-O------------------.png) 27'750'876'529'669
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OX-----OXXX-----X--------------------.png) 55'411'010'992'692
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX-----OXXX-----X--------------------.png) 27'729'136'791'871
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----OXXX---O-X-O----X-------------.png) 22'004'909'230'519
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX----XO------OO-----O------.png) 8'902'967'527'248
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX----XO-----OOO------------.png) 21'889'655'638'670
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX------XXX---OXO-----O-------O------.png) 7'463'720'718'358
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----O-XXX----XO--------------------.png) 45'001'753'235'249
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX------XXX----XO--------------------.png) 33'347'970'606'518
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OX------XXX----X--O------------------.png) 55'286'214'455'783
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXXX----XO--------------------.png) 88'866'318'962'050
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX------XXX----XO--------------------.png) 25'680'633'552'760
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX------XXX----XO--------------------.png) 61'786'268'512'099
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX-----OXXX----X---------------------.png) 52'316'756'856'825
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------OX------XXX----XO--------------------.png) 30'954'375'106'979
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX------XXX----X--O------------------.png) 33'120'555'754'782
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OX-----OXXX----X---------------------.png) 42'984'834'357'713
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX------XXX----XO--------------------.png) 21'012'574'097'171
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX-----OXXX----X---------------------.png) 20'293'177'593'392
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------OO-------OX------XXX----XO--------------------.png) 18'684'637'236'552
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----OXXX---XO---------------------.png) 69'318'953'730'386
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O----O-O------OX------XXXX----X--------------------.png) 7'106'301'413'576
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O----O-O------OX------XXXX---X---------------------.png) 4'808'915'770'011
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOX-----XOO------XOO-----X------------.png) 118'423'281'942'836
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----XOOO---X---X------------------.png) 46'423'368'662'068
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----XOO----X--XO------------------.png) 37'517'065'549'130
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----XOOO---X--X-------------------.png) 36'325'194'732'554
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XOOX-----O-O-----O-------O----.png) 17'636'367'582'962
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----XOOX-----O-O------------------.png) 49'847'517'066'271
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OXO----XOOX-----O--------------------.png) 69'263'391'445'263
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XOOX-----O-O-----OX-----------.png) 56'666'775'785'350
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----XOOX---X---O------------------.png) 32'900'216'755'486
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XOX------OO-----XO-O----------.png) 28'946'271'713'811
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XOX------OXO-----OX-----------.png) 80'186'791'260'052
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX-----XOX------X--------X-----------.png) 31'804'855'458'692
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOX-----XOX------XO-----X--O----------.png) 43'241'132'908'745
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX-----XOX------X------X-------------.png) 32'582'725'476'930
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX-----XOX-----X-------X-------------.png) 24'039'285'794'110
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----XOX----X--O--------O----------.png) 17'607'279'653'576
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OO------OOX-----XOX----X---X------------------.png) 23'857'847'864'299
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OOX-----XOX----X---X------------------.png) 19'265'535'169'139
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX-----XOX----X--X-------------------.png) 35'944'424'283'767
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OOX-----XOX----X--X-------------------.png) 27'637'698'641'991
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX-----XOX----X--X-------------------.png) 26'611'893'416'105
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OOX-----XOXX-----OOO------------------.png) 157'034'927'329'381
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OOX-----XOXX-----O--------------------.png) 69'379'169'909'069
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------O------OOX-----XOXX------O-------------------.png) 59'738'861'469'313
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----XOXX----O-O-------------------.png) 75'594'124'515'778
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O------OOX-----XOXX------O-------------------.png) 80'049'495'382'399
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XOXX-----O-O----XO------------.png) 34'028'942'944'446
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----XOXX---X-O--------------------.png) 31'676'360'906'918
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXO------OOO------OX----------.png) 67'148'707'410'109
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXO------OOO----OX------------.png) 45'167'879'545'578
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXO-----OOOO-----X------------.png) 95'193'333'373'427
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXOOO----O-X-------X----------.png) 63'791'535'839'705
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXO------OXO-------O-------O--.png) 54'101'744'229'575
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-------O-----OXO----XXO------OX-------------------.png) 102'977'635'412'360
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O---O----OXO----XXO-------X--------X----------.png) 12'692'271'790'502
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXO------XOO-----O------O-----.png) 45'007'023'168'003
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXOOO----X-O------X-----------.png) 45'523'314'526'024
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXOOO----X-O-----X------------.png) 29'941'306'242'441
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXO------XOO----X--O----------.png) 60'421'462'155'214
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX-----XXO----X--XO------------------.png) 52'752'260'674'207
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXOX-----O-O-------XO---------.png) 30'377'525'506'355
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXOX-----O-O----O-X-----------.png) 29'453'899'482'855
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXOX-----O-O----OX------------.png) 31'529'230'759'621
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXOX-----O-O----XO------------.png) 37'751'867'740'010
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXOX-----X-O------O------O----.png) 19'530'414'753'339
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX-----XXOX---X---O------------------.png) 25'915'350'576'244
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-O---XXXO-----OOO------------------.png) 105'133'808'106'941
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----OXO----XXXO-------O------------------.png) 67'573'299'443'204
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OXO----XXX-O-------------------------.png) 80'556'760'162'777
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O------OO----OOXO----XXX---------------------------.png) 85'444'654'670'863
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----O-O-----OXO----XXXO--------------------------.png) 50'839'526'407'362
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----O-O-----OXOO---XXX---------------------------.png) 29'307'835'960'033
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------O-O-----OXOO---XXX---------------------------.png) 27'071'610'589'997
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXX-----OOOO------X-----------.png) 119'523'665'513'656
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXX-----OOO-----X--O----------.png) 53'765'943'565'583
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXXO-----OO-----XO------------.png) 59'371'749'040'744
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----OXXX---O----X------------------.png) 17'545'449'439'268
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXX------OX-----OO-----O------.png) 14'365'365'618'715
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXX------OX----OOO------------.png) 25'259'001'226'854
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX----OXXX-----OOX------O------------.png) 74'884'772'836'122
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----OXXX------OX-------------------.png) 105'134'176'582'613
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----OXXX---O---X-------------------.png) 21'833'067'157'343
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX-----XXX------OX-------------------.png) 110'022'333'502'068
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------OX-----XXX------OX-------------------.png) 56'043'227'357'756
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX-----XXX------OX-------------------.png) 47'213'791'799'581
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------OO-------OX-----XXX------OX-------------------.png) 39'827'332'790'512
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXX------XXO------O------O----.png) 17'747'919'909'346
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXXO----XOO------O------------.png) 123'321'880'203'079
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OX-----XXX-----XO--------------------.png) 128'888'071'228'367
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX-----XXX-----XO--------------------.png) 66'251'417'206'774
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OX-----XXX-----X------X--------------.png) 27'089'437'456'622
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OX-----XXX-----X------X--------------.png) 14'062'296'636'781
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOX-----XXX-----X--X------------------.png) 26'400'070'340'900
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----OXXX-----X--X------------------.png) 46'527'807'106'719
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX-----XXX-----X--X------------------.png) 26'930'196'998'919
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOX-----XXX-----X-X-------------------.png) 29'905'468'919'318
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX-----XXX-----X-X-------------------.png) 26'842'912'416'600
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----OXXX----X--X-------------------.png) 34'592'054'483'101
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX-----XXX----X--X-------------------.png) 27'173'914'598'973
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX-----XXX----X--X-------------------.png) 22'741'432'828'903
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXXX-----O------OO-----O------.png) 3'626'229'193'561
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-----XXXX-----O-----OOO------------.png) 6'226'541'467'994
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----OXXXX-----O--------------------.png) 79'503'768'574'509
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----OXXXX--O-----------------------.png) 19'951'690'647'853
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX-----XXXX-----O--------------------.png) 85'265'547'372'030
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------OX-----XXXX-----O--------------------.png) 41'370'476'711'621
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX-----XXXX-----O--------------------.png) 31'195'082'507'175
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------O--------OO-------OX-----XXXX-----O--------------------.png) 27'436'546'521'548
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX-----XXXX----X---------------------.png) 29'382'272'464'955
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOX----OXXXX---X----------------------.png) 36'297'972'818'374
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX-----XXXX---X----------------------.png) 28'154'184'035'979
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOOX-----XXXX---X----------------------.png) 24'647'531'283'163
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX-----XXXX---X----------------------.png) 26'340'814'999'528
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO-------OX-----XXXX---X----------------------.png) 13'468'303'742'553
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX----XOXX----O---X------------------.png) 9'959'692'627'606
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----XOXX-----O-X-------------------.png) 39'291'008'044'926
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----XOXX----O--X-------------------.png) 21'480'710'786'181
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX----XOXX----O--X-------------------.png) 13'266'798'479'524
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----XOXXX----O---------------------.png) 32'564'796'041'834
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----XOXXX---O----------------------.png) 17'662'909'934'987
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX----XOXXX---O---X-------X----------.png) 3'723'629'913'898
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----XXOX-------O--------O----------.png) 52'751'487'234'789
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX----XXOX------O-X------------------.png) 22'156'572'611'938
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----XXOX------OX-------------------.png) 102'334'544'925'259
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX----XXOX------OX-------------------.png) 41'859'551'358'795
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----XXOXX------O-------------------.png) 90'533'319'156'139
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----XXOXX-----O--------------------.png) 74'178'742'357'942
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX----XXOXX-----O-X-------X----------.png) 14'823'328'397'772
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----XXXO-------XO------------------.png) 52'396'896'504'860
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-------OX----XXXO-------XO------------------.png) 26'961'890'489'693
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX----XXXOX---O-O-O------------------.png) 27'089'215'114'868
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------------O-OX----XXXOX-----O-O------------------.png) 30'772'633'875'177
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOX----XXXOX-------O------------------.png) 46'482'453'265'680
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX----XXXOX-------O-------XO---------.png) 8'128'006'436'320
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOX----XXXX--------X------------------.png) 22'444'098'452'035
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----OOOX----XXXX--------X------------------.png) 29'934'488'661'384
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX----XXXX--------X------------------.png) 24'445'244'698'458
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OX----XXXX--------X------------------.png) 19'412'228'827'342
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOX----XXXX-------X-------------------.png) 23'889'916'671'626
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX----XXXX-------X-------------------.png) 27'883'670'971'545
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OX----XXXX-------X-------------------.png) 20'919'473'188'468
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OX----XXXXX--------------------------.png) 27'822'805'617'399
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OX----XXXXX--------------------------.png) 20'647'714'694'461
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-X----OOOO----XX-----X-------------.png) 25'060'500'045'930
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-X----OOX-----OX-----XO------------.png) 30'404'019'824'156
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-X----OOX-----XO-----X--O----------.png) 44'706'338'637'919
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OX-X----OOX-----XO-----X-O-----------.png) 61'032'475'838'355
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OXX-----OOOO----X-O----X-------------.png) 38'348'889'483'601
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OXX-----OOO-----XXO----X-------------.png) 55'245'610'392'609
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------OXX----OOOO----X---------------------.png) 64'350'053'391'564
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----OOOO----X-X-------------------.png) 50'675'202'707'305
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----OOOO----XX--------------------.png) 79'433'437'628'629
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OO-----XX-O----X-------------.png) 17'021'146'114'758
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OO-----XXXO------------------.png) 28'374'082'324'963
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OO----XXX-O------------------.png) 14'062'307'388'490
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----OOO---XXX--------------------.png) 31'980'364'785'507
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OOX----XO--X-----------------.png) 33'666'813'267'054
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----OOOX----X---X-----------------.png) 32'871'686'325'573
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----OOX----XO--X-----------------.png) 22'530'992'055'236
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----OOOX----X---X-----------------.png) 22'340'623'524'525
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----OOX----XO-X------------------.png) 28'409'156'161'073
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----OOOX----X--X------------------.png) 27'319'899'691'779
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OXX-----OX-----OOOO----X-------------.png) 40'568'415'267'829
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OXX-----OXO-----OO-----XO------------.png) 86'485'112'336'435
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OXX-----OXOO----O------XO------------.png) 54'633'938'177'854
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OXX-----OX------OXO----XO------------.png) 42'287'967'003'861
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OXX-----OX------XOO----X--O----------.png) 38'103'003'188'591
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OXX-----OXO-----XO-----X--O----------.png) 64'041'479'564'885
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX-----OX------XO------------.png) 33'896'356'131'559
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX-----OX-----OX-------------.png) 23'478'958'184'424
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX-----OXO-----X-------------.png) 58'970'647'289'393
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----OOX----O-X------X-------------.png) 40'527'767'420'352
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX---OOOX------X------X-------------.png) 22'698'403'905'084
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX-----XO-O-----O------------.png) 36'457'302'443'607
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX-----XOOO------------------.png) 79'990'719'521'714
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOXX---O-OX-----XO--------------------.png) 53'058'053'391'833
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OXX-----OX-----XO--------------------.png) 133'434'639'513'204
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----OXO----XO-------O------------.png) 65'132'439'472'048
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OOXX-----OX-----XO--------------------.png) 44'361'224'234'212
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------OXX-----OX-----XO--------------------.png) 47'388'180'734'344
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OXX---OOOX-----X-------X-------------.png) 30'066'139'219'211
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX-----XO------XO------------.png) 45'040'430'384'230
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----OOX----OX-------X-------------.png) 37'904'758'371'032
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX---OOOX-----X-------X-------------.png) 15'132'454'230'337
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX-----XO-----X-O------------.png) 25'890'639'938'078
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX-----XOO----X--------------.png) 47'943'379'498'459
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OXX-----OX-----XOXO-----O------------.png) 55'490'635'298'445
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OXX----OOXO----X-X-------------------.png) 93'060'026'305'833
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX-----XOX------O------------.png) 53'278'549'123'620
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----OXO----XOX-------------------.png) 79'335'507'988'023
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX-----XXO--------O----------.png) 38'859'318'611'164
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX----XOX-----O--------------.png) 23'903'881'299'136
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX----XXO-------O------------.png) 32'275'436'129'839
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OX----XXXO-------------------.png) 35'120'780'702'220
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------OXX-----OXX-----O-O----XO------------.png) 31'580'660'398'098
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OXX----XO-O------------------.png) 79'870'135'942'137
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OXX----OOXX----X--X------------------.png) 32'810'544'359'171
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----OXX----XO-X------------------.png) 50'369'659'063'441
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----OOXX----X--X------------------.png) 21'179'153'860'314
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----OXXX---XO--------------------.png) 22'890'452'108'347
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOXX----OXO------X-O------------------.png) 48'510'687'490'761
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------OXX-----XO------X-O------------------.png) 23'926'435'151'520
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OXX-----XO-----X--O------------------.png) 70'766'991'869'578
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX---OOXO-----X-O-------------------.png) 49'220'239'348'614
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OXX----OXO-----X---------------------.png) 92'466'434'687'045
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------OXX-----XO-----X--O------------------.png) 21'491'295'810'719
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-----O-O------OXX-----XOO----X---------------------.png) 56'641'444'892'972
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OXX----OXO-----X---------------------.png) 84'825'115'863'153
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----XOOO---X---X-----------------.png) 49'161'073'078'774
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----XOOO---X---X-----------------.png) 39'333'654'493'414
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----XOOO---X--X------------------.png) 53'517'873'771'416
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----XOO----X-XO------------------.png) 54'596'780'394'091
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----XOO----XX-O------------------.png) 38'014'394'734'029
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----OXOO----XX--------------------.png) 78'377'445'883'373
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----XO-----XX-O---X--------------.png) 13'985'497'967'584
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----XOO----XX-----X--------------.png) 20'935'069'006'572
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX-----XOX----X--O--------O---------.png) 28'484'400'473'120
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----XOX----X--O--------O---------.png) 12'636'904'449'748
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----XOXX---X--O------------------.png) 24'177'761'380'173
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OXX---OOXX-----OX--------------------.png) 106'854'202'968'392
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOXX----OXX-----OX--------------------.png) 126'213'159'075'219
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----OXX----O-X-O------------------.png) 19'388'809'761'036
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----OXX----OOX--------------------.png) 73'331'171'271'017
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOXX----OXX-----OX--------------------.png) 103'467'850'126'050
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----OXX----O-XO-------------------.png) 45'407'642'247'437
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----OOXX----OXX------X--------------------.png) 77'147'124'962'945
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O----OOOXX-----XX------X--------------------.png) 27'524'675'737'245
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----O-OXX----OXX-----XO--------------------.png) 47'768'898'564'427
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX-----XXO----X-O------O------------.png) 65'555'921'130'939
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO------OXX-----XXO----X---------------------.png) 57'577'628'351'627
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------OOO-------O-------OXX-----XX-----X---------------------.png) 4'501'066'709'161
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-O--------OO-------O-------OXX-----XX-----X---------------------.png) 2'115'782'517'183
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OXX---OOXX-----X------X--------------.png) 27'568'861'397'183
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OOXX----OXX-----X------X--------------.png) 38'418'054'307'999
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----OXX----OX------X--------------.png) 17'540'843'953'109
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------OXX----OXXO----XX--------------------.png) 140'198'575'183'226
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOO-----O-X--------X----------.png) 58'003'156'668'454
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOO------OX--------X----------.png) 40'546'851'889'455
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOO-----O-X--------X----------.png) 29'427'891'687'691
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOO------X-O------X-----------.png) 66'002'242'854'563
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOO------X-O----X-------------.png) 40'422'479'042'127
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOO-----X--O----X-------------.png) 38'427'421'593'469
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOO-----X-O-----X-------------.png) 43'622'944'370'963
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOO-----X-O-----X-------------.png) 28'471'693'864'157
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOOO----X-------X-------------.png) 43'810'906'419'951
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX---OXOO----X--O-------------------.png) 62'775'361'750'971
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX---OXOO----X--O-------------------.png) 44'051'108'856'287
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------OXX----XOO----X----------------------.png) 75'361'183'780'536
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O-O-----OXX----XOO----X----------------------.png) 39'290'455'068'297
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------OO------OXX----XOO----X----------------------.png) 62'689'089'148'773
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOOO---X-X--------------------.png) 59'006'491'572'165
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOOO---XX---------------------.png) 48'908'270'831'214
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOOX----O---X-----------------.png) 61'615'745'768'151
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOOX----O---X-----------------.png) 42'322'228'548'698
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOX------O-O-----O------------.png) 37'830'300'426'934
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOX------OOO------------------.png) 97'037'013'359'947
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOX-----OO-------O------------.png) 55'126'995'930'026
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOX-----OOO-------------------.png) 88'641'955'611'280
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOXX---OXOX------O--------------------.png) 70'169'510'930'014
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OXX----XOX------O--------------------.png) 149'348'611'130'290
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OXX----XOX-----O---------------------.png) 98'941'671'329'943
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOX------OO------O------------.png) 57'689'130'159'199
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OOXX----XOX------O--------------------.png) 67'675'285'127'979
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------OXX----XOX------O--------------------.png) 54'874'009'353'346
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------O------OOXX----XOX------O--------------------.png) 61'243'252'521'587
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------O------OOXX----XOX------O--------------------.png) 59'463'234'394'226
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOX------O-------OX-----------.png) 31'125'940'774'590
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOX------O------XO------------.png) 32'310'030'910'015
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOX-----O------OX-------------.png) 17'752'528'580'746
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOX-----O-OX------------------.png) 68'118'943'881'394
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOXX----XOX-------OX------------------.png) 67'303'096'940'211
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOXX----XOX-------X-------X-----------.png) 31'764'415'353'882
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOX------OX-------X-----------.png) 22'949'290'338'117
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOXX----XOX------XO-------------------.png) 93'088'392'123'919
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOX-----XO-----X--------------.png) 44'949'044'283'688
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX---OXOX----XO---------------------.png) 46'806'618'917'207
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OOXX----XOX----XO---------------------.png) 45'368'554'281'313
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOXX-----O-O------------------.png) 99'524'617'935'279
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOXX----O-O-------------------.png) 87'223'233'893'585
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOXX-----OO-------------------.png) 87'100'118'235'675
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOXX----XOXX------O-------------------.png) 80'735'969'758'036
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOXX-----O--X-----------------.png) 46'489'439'947'151
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XOXX-----O--X-----------------.png) 34'233'742'135'969
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOXX-----O-X------------------.png) 63'363'187'151'199
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XOXX----O--X------------------.png) 35'006'189'720'995
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----OXX----XXO--------O------------------.png) 100'415'934'780'770
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XXO-------OOO-----------------.png) 34'214'592'118'325
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XXO-------O-------OX----------.png) 37'121'607'206'319
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XXO-------XO------X-----------.png) 31'254'298'597'067
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XXO-----OX-O------------------.png) 103'948'348'917'087
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XXO------XOO------------------.png) 58'000'827'338'090
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O----OOOXX----XXO-----X---------------------.png) 102'477'121'730'938
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XXO-----XO-O------------------.png) 82'682'452'036'607
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OOXX----XXO-----X-O-------------------.png) 79'595'249'643'513
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XXO-----X--O---X--------------.png) 26'525'017'681'349
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XXOO----X------X--------------.png) 36'488'905'535'755
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XXOX-------O--------O---------.png) 47'806'095'592'923
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XXOX------OO------------------.png) 68'713'842'639'355
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XXOX-------OX-----------------.png) 51'990'986'535'044
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XXOX-------OX-----------------.png) 27'148'949'705'025
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX----XXX-----OOO-------------------.png) 132'689'847'523'038
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-----O-OXX---OXXX----O----------------------.png) 12'761'552'215'256
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--------OXX----XXX-----OOO-------------------.png) 85'811'265'666'038
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------OOO-------O-------OXX----XXX---------------------------.png) 7'760'207'962'084
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-O--------OO-------O-------OXX----XXX---------------------------.png) 3'506'350'734'987
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX---XXOX----O-O--------------------.png) 50'414'638'365'754
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------OXX---XXXO----O---O------------------.png) 40'185'648'512'512
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O---O----OXXX----XOO----X---------------------.png) 35'706'254'557'298
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--O-----OXXX----XOO----X---------------------.png) 53'754'625'434'159
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----OO-----OXO-----X-------------.png) 45'122'213'700'918
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OO-----OXX--------X----------.png) 37'012'634'069'709
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----OOO------XX--------X----------.png) 61'371'540'507'606
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----OO-----OXX--------X----------.png) 48'937'545'702'076
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX----OOOO----XX--------------------.png) 80'345'044'413'182
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OO----XXXO-------------------.png) 8'782'628'181'701
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----OO----XXXO-------------------.png) 26'993'217'233'713
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----OOO---XXX--------------------.png) 30'140'813'525'243
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----OOOX----X---X-----------------.png) 72'595'817'485'420
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX---OOOX-----OX--------------------.png) 30'528'203'073'764
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OXOX----OOX-----OX--------------------.png) 44'557'523'148'053
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----OXO----OX-----O--------------.png) 51'730'784'436'392
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----OXO----OX-----O--------------.png) 21'188'155'675'869
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OX-----OXO------X------------.png) 68'525'375'795'674
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OX-----OX-------X-------X----.png) 9'043'072'996'045
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OX-----OX------XO------------.png) 25'731'665'663'140
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OX-----OXO-----X-------------.png) 36'125'002'240'220
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OX-----OXX--------X----------.png) 27'671'845'760'611
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----OOX------XX--------X----------.png) 36'239'495'375'025
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OXOX-----OX------XX-------X-----------.png) 19'265'930'960'334
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OX-----OXXX------------------.png) 29'944'653'377'210
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OXOX-----OX------XXX------------------.png) 23'932'740'064'336
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----OX-----OXXX------------------.png) 38'150'601'135'029
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX---OOOX-----X-------X-------------.png) 36'126'249'158'882
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OX----XOX-----O--------------.png) 12'641'892'982'762
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OX----XXO-------O------------.png) 37'492'423'326'905
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----OX----XXXO-------------------.png) 22'547'987'633'784
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----OOXX----X--X------------------.png) 58'037'577'340'413
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------XOX-----XO-------OX------------------.png) 83'217'217'741'367
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------OO------XOX-----XO-------OX------------------.png) 57'223'600'130'192
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OXOX---O-XOO------X-------------------.png) 93'756'861'675'718
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----XO------OX-----O--X----------.png) 43'707'366'405'025
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XO------OX-----O--X----------.png) 57'419'214'449'619
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XOO-----XO--------O----------.png) 57'727'246'559'346
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XOO-----XO------O------------.png) 83'776'542'539'699
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XOO-----XO-O-----------------.png) 66'169'421'557'702
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOXO----XOO-----XO-------------------.png) 71'934'768'366'999
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----XOX-----XO------XO-------------------.png) 88'425'467'201'146
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------O------XOX-----XOO-----XO-------------------.png) 66'081'485'073'314
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------OO-----XOX-----XO------XO-------------------.png) 61'297'195'664'193
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----XO------XO-------OX----------.png) 41'823'859'346'937
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XO------XO-------OX----------.png) 57'600'513'396'256
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XO-----OXO------X------------.png) 116'577'265'143'150
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XO-----OXO-----X-------------.png) 87'236'888'240'817
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----XO------XOX------O-----------.png) 54'267'358'386'931
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XO------XOX------O-----------.png) 71'358'972'763'944
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XOO----X-O--------O----------.png) 47'276'528'783'612
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XOO----X-O------O------------.png) 79'928'473'498'501
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------XOX-----XOO----X---------------------.png) 76'502'462'424'979
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------OO------XOX-----XOO----X---------------------.png) 61'477'129'933'907
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O-------OO-------XOX-----XOO----X---------------------.png) 42'076'319'037'534
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XO-----XOO----X--------------.png) 67'506'273'506'545
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XOOO---X---X-----------------.png) 51'430'132'495'043
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XOOO---X--X------------------.png) 42'529'389'107'580
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XOO----XXO-------------------.png) 73'252'182'897'899
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OXOX-----XO-----XXO-------------------.png) 74'368'774'197'660
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XOO----XXO-------------------.png) 48'612'689'612'349
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX----OXOO----XX--------------------.png) 103'934'145'071'725
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XOO----XX-----X--------------.png) 22'064'368'267'278
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XOO----XX-----X--------------.png) 13'309'983'149'453
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----XOX-----XO-X-----------------.png) 42'101'900'445'728
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XOX-----XO-X-----------------.png) 62'198'280'157'717
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----XOX-----XOX------------------.png) 50'055'447'102'501
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XOX-----XOX------------------.png) 50'435'092'142'988
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XOX----X-OX------------------.png) 65'815'965'591'390
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XOX----X-OX------------------.png) 45'670'902'084'425
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XOXX----XO-------------------.png) 44'234'948'184'783
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XOXX---X-O-------------------.png) 60'995'499'480'558
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XOXX---X-O-------------------.png) 44'854'152'576'604
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------XOX-----XXO-------X------------------.png) 68'267'084'392'900
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------OO------XOX-----XXO-------X------------------.png) 32'022'790'615'480
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O----OXOX---O-XX-------X-------------------.png) 23'515'680'805'463
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----XXO-----X--O--------O--------.png) 7'259'323'291'109
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----XXO-----XO-O-----------------.png) 37'855'676'249'744
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------OOO---XOX-----XXO-----X--------------------.png) 16'854'532'076'366
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------OOO---XOXO----XX------X--------------------.png) 7'785'819'666'560
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XXO-----X--O--------O--------.png) 13'558'962'781'227
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XXO-----XO-O-----------------.png) 62'851'736'047'856
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XXO-----XO--------O----------.png) 43'674'934'247'484
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XXO-----XO-O-----------------.png) 42'858'183'973'248
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOXO----XXO-----XO-------------------.png) 49'386'599'224'586
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OXOX---O-XXO-----X--------------------.png) 36'045'824'128'927
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O----OXOX---O-XX------X--------------------.png) 19'018'878'382'255
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OXOX-----XXO-----X--------------------.png) 32'379'996'174'269
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------XOX-----XXO-----X--------------------.png) 37'551'598'789'109
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-O-----XOX-----XX------X--------------------.png) 18'407'690'434'766
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------OO----XOXO----XX------X--------------------.png) 9'873'103'268'331
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------O------OXOX-----XXO-----X--------------------.png) 33'495'482'237'046
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------O-O----OXOX-----XX------X--------------------.png) 18'265'028'786'356
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------OO------XOX-----XXO-----X--------------------.png) 46'707'266'415'118
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------OOO------O-----XOX-----XX------X--------------------.png) 4'519'161'838'490
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------O------OXOX-----XXO-----X--------------------.png) 35'495'884'073'474
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------O-O----OXOX-----XX------X--------------------.png) 20'414'837'252'931
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O-------O--O----OXOX-----XX------X--------------------.png) 26'396'461'271'357
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----O-------OO------O-----XOX-----XX------X--------------------.png) 1'333'112'977'883
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-O--------O--------O-------XOX-----XXO-----X--------------------.png) 6'917'868'042'703
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-O--------O--------O-O-----XOX-----XX------X--------------------.png) 3'782'406'069'019
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XXOO----X--X-----------------.png) 37'823'493'178'829
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX-----XXO-----X-XO-----------------.png) 18'386'193'968'992
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XXO-----X-XO-----------------.png) 23'900'671'372'921
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XXOO----X-X------------------.png) 30'914'655'261'684
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XXO----X-O--------O----------.png) 38'818'787'385'566
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XXO----X-O------O------------.png) 59'952'025'802'321
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OXOX---O-XXO----X---------------------.png) 57'789'209'594'833
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OXOX-----XXO----X---------------------.png) 34'160'753'048'745
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------XOX-----XXO----X---------------------.png) 39'691'013'697'510
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XXO----X--XO-----------------.png) 28'727'795'739'105
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XXO----X--XO-----------------.png) 24'106'189'581'253
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX----OXXO----XX--------------------.png) 97'634'483'594'108
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XXOX----X--O-----------------.png) 19'583'132'669'764
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX-----XXOX---X---O-----------------.png) 25'538'511'823'352
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX-----XXOX---X---O-----------------.png) 21'029'624'487'355
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOO-----O-OX------------------.png) 40'958'825'522'131
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OXOX----XOO-------OX------------------.png) 52'006'930'691'086
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOO-----O-X--------X----------.png) 38'446'693'696'481
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOO-----O-X--------X----------.png) 53'831'448'388'843
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOO-----X-O-----X-------------.png) 18'142'505'962'514
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOO-----X-O-----X-------------.png) 40'118'854'467'205
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOOO----X-------X-------------.png) 48'993'278'711'014
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX---OXOO----X--O-------------------.png) 20'819'120'582'346
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX---OXOO----X--O-------------------.png) 28'255'710'154'579
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOOO---X-X--------------------.png) 16'434'975'702'549
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOOO---XX---------------------.png) 44'546'987'727'390
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOOX----O-O-------------------.png) 94'069'295'060'174
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOOX----O---X-----------------.png) 35'907'459'234'354
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOOX----O---X-----------------.png) 53'514'332'446'621
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOX-----OO-------O------------.png) 30'544'472'541'863
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOX-----OOO-------------------.png) 46'973'739'126'503
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOX-----OOO-------------------.png) 56'166'922'147'873
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOX-----O------OX-------------.png) 12'252'838'877'271
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOX-----O-OX------------------.png) 29'201'194'822'723
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OXOX----XOX-------OX------------------.png) 40'601'920'258'343
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOX-----O-OX------------------.png) 36'232'485'925'151
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OXOX----XOX-------X-------X-----------.png) 24'207'605'025'026
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX---OXOX----XO---------------------.png) 23'734'316'337'547
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OXOX----XOX----XO---------------------.png) 32'824'644'410'050
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOXX----O-O-------------------.png) 64'925'146'749'557
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOXX----O-O-------------------.png) 79'005'874'276'909
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOXX----O---X-----------------.png) 27'512'252'602'452
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XOXX----O---X-----------------.png) 36'917'781'407'808
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOXX----O--X------------------.png) 28'165'574'460'581
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XOXXX---O---------------------.png) 24'594'158'454'899
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XXO-------O-------OX----------.png) 31'653'244'343'608
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XXO-------O-------OX----------.png) 47'997'975'563'726
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OXOX----XXO------XO-------------------.png) 117'506'053'747'490
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OXOX----XXO-----X-O-------------------.png) 104'448'052'919'636
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XXOO----X------X--------------.png) 35'097'996'245'201
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX----XXOO----X------X--------------.png) 21'228'058'973'960
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----OXOX----XXOX------O-------------------.png) 164'184'251'283'872
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XXOX------O-X-----------------.png) 47'267'503'433'562
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XXOX------O-X-----------------.png) 66'834'659'784'247
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XXOX------OX------------------.png) 50'757'998'269'370
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XXX-------OOO-----------------.png) 29'707'966'830'095
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XXXO--------O--------O--------.png) 6'639'642'685'267
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XXXO------O-O-----------------.png) 29'867'916'364'639
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------OOO---XOX----XXXO--------------------------.png) 18'702'556'225'384
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------OOO---XOXO---XXX---------------------------.png) 9'931'872'149'691
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XXX-------OOO-----------------.png) 36'784'231'087'550
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XXXO--------O--------O--------.png) 13'078'783'321'978
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XOX----XXXO------O-O-----------------.png) 56'720'691'993'902
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX----XXXO------O--------O----------.png) 38'544'139'696'028
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX----XXXO------O------O------------.png) 38'423'244'907'468
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX----XXXO------O-O-----------------.png) 39'016'782'894'699
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOXO---XXXO------O-------------------.png) 44'077'064'652'440
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O----OXOX---OXXX---------------------------.png) 43'920'687'590'843
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OXOX----XXXO--------------------------.png) 50'709'881'378'818
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------XOX----XXXO--------------------------.png) 40'221'037'271'900
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-O-----XOX----XXX---------------------------.png) 20'789'376'050'456
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------O------OO----XOXO---XXX---------------------------.png) 12'611'580'399'050
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------O------OXOX----XXXO--------------------------.png) 51'344'658'357'529
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------O-O----OXOX----XXX---------------------------.png) 34'190'895'086'819
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------OOO------O-----XOX----XXX---------------------------.png) 3'920'844'267'900
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------O------OXOX----XXXO--------------------------.png) 55'646'489'370'706
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------O-O----OXOX----XXX---------------------------.png) 37'645'432'341'587
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----O-------OO------O-----XOX----XXX---------------------------.png) 973'160'355'182
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX----XXXO-------XO-----------------.png) 16'556'801'666'287
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-------XOX----XXXO----OX--------------------.png) 61'315'589'758'598
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----OXOX---XXOX-----O---------------------.png) 62'217'462'415'182
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XOX--XXXOX-----O---------------------.png) 8'459'272'468'227
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-O----XOXX----XOO----X---------------------.png) 58'273'414'877'614
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OO-----XOXX----XOO----X---------------------.png) 61'593'705'915'258
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O--O----XOXX----XOO----X---------------------.png) 52'500'498'396'198
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----XOXX----XOO----X---------------------.png) 64'891'447'994'012
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------O-------XOXX----XXO-------O------------------.png) 43'230'481'468'165
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------O-------XOXX----XXO------X-------------------.png) 22'070'952'704'701
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----XOXX----XXO-----X--------------------.png) 62'700'971'924'578
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O-----XOXX---XXXO--------------------------.png) 65'317'223'047'852
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O----XXO----OOOO----X--X------------------.png) 66'854'124'724'191
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXO----OOOO----X--X------------------.png) 83'849'859'554'761
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX------OOX-----X-O----X-------------.png) 34'898'212'514'530
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O----XXO----OOOX----X---X-----------------.png) 50'434'228'396'695
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXO----OOOX----X---X-----------------.png) 69'560'739'117'482
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX------OX------XO-----X--O----------.png) 10'180'692'441'686
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX------OX------XOO----X-------------.png) 26'972'829'275'907
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX-----OOX-----X-OX------------------.png) 56'683'077'140'513
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX----OOOX-----X--X------------------.png) 37'838'885'832'480
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX-----OOX-----X-OX------------------.png) 35'784'782'302'536
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX----OOOX-----X--X------------------.png) 23'993'969'124'369
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX-----OOX----XO--X------------------.png) 26'963'995'287'426
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX----OOOX----X---X------------------.png) 22'172'418'041'871
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX-----OOX----XO--X------------------.png) 15'104'564'353'860
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX----OOOX----X---X------------------.png) 12'635'149'886'880
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX-----OOX----XO-X-------------------.png) 18'314'731'896'070
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX----OOOX----X--X-------------------.png) 14'682'015'215'261
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX------OXX-----O------XO------------.png) 15'124'860'440'270
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX------OXX----XOO-------------------.png) 42'168'698'642'206
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O----XXO-----XOXX---XO--------------------.png) 22'548'805'341'984
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXO-----XOXX---XO--------------------.png) 51'762'886'461'433
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX-----OXX------O-X------O-----------.png) 51'838'397'497'097
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX-----OXX------O-X----O-------------.png) 31'952'182'400'641
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX-----OXX-----O--X----O-------------.png) 20'377'984'441'259
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX-----OXX------O-X------O-----------.png) 32'688'575'024'179
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX-----OXX-----O--X----O-------------.png) 12'156'352'033'572
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O----OOOO-------XX------XX--------X------------------.png) 1'550'369'158'778
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX-----OXX------OX-------O-----------.png) 72'357'575'598'205
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX-----OXX------OX-----O-------------.png) 54'318'357'216'419
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX-----OXX----O-OX-------------------.png) 59'645'519'020'758
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O------OOXX-----OXX------OX-------------------.png) 66'660'265'192'135
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------XXO-----XX-O-----X-------------------.png) 40'811'465'646'606
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO-----OXX-----OXX-------X-------------------.png) 114'678'697'901'217
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO-----OXX----O-XX-------X-------------------.png) 52'661'179'089'430
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO----OOXX------XX-------X-------------------.png) 61'242'466'653'958
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO-O----XXO-----XX-------X-------------------.png) 40'198'506'945'038
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O----OOO------XXO-----XX-------X-------------------.png) 43'175'659'250'983
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-----OO------OXX-----OXX-------X-------------------.png) 52'915'470'334'919
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-----OO-----OOXX------XX-------X-------------------.png) 23'208'287'086'063
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O-------O------OXX----OOXX-------X-------------------.png) 26'577'985'353'494
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------O------O-XX-----OXX------OX-------------------.png) 12'185'817'209'501
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------O-O----O-XXO-----XX-------X-------------------.png) 6'275'301'847'027
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO------OXX-----OXX-------X-------------------.png) 59'578'282'383'157
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OO------OXX----O-XX-------X-------------------.png) 23'369'205'917'818
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------O------OOO------XXO-----XX-------X-------------------.png) 47'761'877'077'276
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--------OOO-----XXO-----XX-------X-------------------.png) 52'886'352'653'116
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O-------O-O-----OXX-----OXX-------X-------------------.png) 28'039'719'360'117
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------O--O-----O-O-----XXO-----XX-------X-------------------.png) 9'927'819'186'000
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------OO-------OO------XXO-----XX-------X-------------------.png) 25'122'324'712'072
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXX-----OXXO------XX------------------.png) 79'912'157'473'442
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXO-----XXO-----X-OX-----------------.png) 40'176'632'045'763
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXO-----XXOO----X--X-----------------.png) 12'886'513'218'001
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XXO-----XXOO----X--X-----------------.png) 20'296'566'786'863
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXO-----XXOO----X-X------------------.png) 37'011'925'364'799
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O------XXO-----XXOO----X-X------------------.png) 55'812'259'047'183
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------XX-----OXX------X-X------------------.png) 43'718'827'820'760
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----XX------XXO-----XX-------------------.png) 57'479'557'649'241
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----XX------XX------XX-------X-----------.png) 16'469'564'335'565
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXO-----XXOX----X-O------------------.png) 48'298'457'602'689
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O----XXO-----XXOX---X--O------------------.png) 22'678'568'333'605
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXO-----XXOX---X--O------------------.png) 37'739'756'294'615
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXO-----XXXO----X---O----------------.png) 9'192'582'216'720
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------O------OXX------XXX-----XO-------------------.png) 35'908'337'199'721
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OOO------XX------XXX-----X-------X------------.png) 12'649'536'670'346
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O----XXO-----XXXO---X----O----------------.png) 3'433'025'222'363
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXO-----XXXO---X----O----------------.png) 7'041'231'507'630
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX-----OXXX---XO---------------------.png) 17'140'232'436'269
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O----XXO----XOOX----O---X-----------------.png) 48'251'829'517'197
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX-----XOXX-----OO-------------------.png) 51'272'247'228'014
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXX-----XOXX---X--O-------------------.png) 23'618'486'540'215
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------O------OXX-----XXXX------O-------------------.png) 42'340'168'584'175
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOO-----XX-----XXXX--------X-----------------.png) 12'566'824'137'903
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------OO----XXOX----XOO----X---------------------.png) 28'017'774'164'649
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXOXX---XXO-----X--------------------.png) 12'196'998'843'419
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXOXX--XXXO--------------------------.png) 11'641'585'043'391
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OOO----OX------XO------------.png) 49'428'924'716'778
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OOO----OXO-----X-------------.png) 40'421'953'727'906
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----OOOO----X-O--------O----------.png) 55'166'094'063'873
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----OOOO----X-O------O------------.png) 65'197'720'082'237
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX---OOOO-----X-O-------------------.png) 66'808'543'633'275
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------OXXX----OOOO----X---------------------.png) 97'903'328'913'927
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---OOOO-----X-O-----X-------------.png) 30'938'927'543'025
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---OOOOO----X-------X-------------.png) 39'642'544'893'492
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---OOOOO----X------X--------------.png) 33'855'255'692'848
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX----OOOO----X------X--------------.png) 54'101'639'061'920
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----OOOOO---X---X-----------------.png) 53'907'853'936'048
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----OOOOO---X--X------------------.png) 66'762'465'624'163
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----OOOO----XX-----X--------------.png) 40'109'919'793'668
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OOO---XOX-----O--------------.png) 15'950'744'119'083
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---OOOOO---X-X--------------------.png) 36'232'240'576'160
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OOO---XXO-------O------------.png) 20'952'578'880'405
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OOO---XXO------O-------------.png) 39'620'061'580'915
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---OOOOO---XX---------------------.png) 55'687'081'465'631
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OOO---XXXO-------------------.png) 10'664'780'436'624
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OX-----OOO-----XO------------.png) 20'192'473'374'628
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---OOOX-----O-------XO------------.png) 15'727'510'162'082
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---OOOX-----O------OX-------------.png) 11'233'794'996'761
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX----OOX-----O------OX-------------.png) 24'153'151'840'427
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX-----OX-----OXO-----X-------------.png) 26'953'904'879'111
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----OOXO----X-O--------O----------.png) 56'167'542'064'132
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----OOXO----X-O------O------------.png) 69'102'442'303'123
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX-----OXO----X-O--------O----------.png) 35'797'895'671'202
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX-----OXO----X-O------O------------.png) 50'066'045'585'651
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OXXX---O-OX-----X-O-------------------.png) 34'501'219'376'470
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OXXX---O-OX-----XO--------------------.png) 44'395'096'448'946
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OXXX-----OX-----X-O-------------------.png) 24'423'648'348'635
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O-O------OXXX-----OX-----XO--------------------.png) 34'885'765'948'042
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------OOO-------XXX-----OX-----XO--------------------.png) 36'974'254'150'745
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX-----OX-----XOO----X--------------.png) 28'535'947'832'967
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX----OOX-----X-O----X--------------.png) 26'776'464'834'574
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OX----XOO-----O-O------------.png) 10'294'964'093'399
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OX----XOOO----O--------------.png) 25'484'686'635'189
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---O-OX----XOO-------O------------.png) 14'137'118'598'448
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX---OOOX----XO---------------------.png) 19'528'708'465'525
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OX----XOXO----O--------------.png) 9'904'768'115'622
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OXO---XOX-----O--------------.png) 12'668'530'671'053
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OX----XXOO------O------------.png) 22'488'739'462'001
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----OXO---XXO-------O------------.png) 27'431'678'066'846
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XOOO---X---O--------O--------.png) 6'108'852'535'989
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XOOO---X---O-------O---------.png) 12'349'926'907'954
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XOOO---X--O--------O---------.png) 19'783'449'831'370
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XOOO---X--O-------O----------.png) 26'111'434'035'285
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XOOO---X--O------O-----------.png) 22'295'630'523'166
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----OXOO----XO--------O-----------.png) 67'662'330'792'437
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O----XXXO----XOOO---X---------------------.png) 28'258'716'045'417
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------OO---XXXO----XOO----X---------------------.png) 13'770'228'623'319
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXXO----XOO-O--X---------------------.png) 21'380'385'712'824
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-O---XXXO----XOO----X---------------------.png) 19'750'137'945'048
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OXXX---O-XO-----X--O------------------.png) 48'723'307'624'195
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XOO----XO-----XO-------------.png) 16'605'375'846'634
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XX----OOO-----X-O------------.png) 3'883'747'842'072
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XX----OOOO----X--------------.png) 16'899'163'043'507
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---O-XX-----OO-----X-O------------.png) 1'292'547'752'303
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---OOXX-----O------X-O------------.png) 1'395'074'757'337
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---OOXX-----O------XO-------------.png) 4'176'208'767'421
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX----OXX-----O------XO-------------.png) 15'954'689'206'403
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XX------XO-------OO--------O-.png) 2'879'916'085'764
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XX------XO-------OOO---------.png) 6'935'355'225'644
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XX------XOOO-----O-----------.png) 11'235'882'828'664
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XX-----OXO------O--------O---.png) 12'952'184'923'044
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XX-----OXO------O------O-----.png) 11'782'525'254'449
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XX-----OXO-----O-------O-----.png) 9'193'094'305'271
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XX-O----XOO------O-----------.png) 13'529'508'136'726
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----OXXO----OX------O-------------.png) 54'699'580'541'457
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX----OXXO----OX--------------------.png) 74'144'715'757'385
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----OXXX----OXX------X--------------------.png) 58'644'716'653'742
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX-----XX-----OX-------O-------XO---.png) 699'970'558'295
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----OXXO----XO--------O-----------.png) 52'808'012'945'300
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------OXXX---O-XXO----X---------------------.png) 38'384'374'817'215
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----XOO-----O-O-------OX----------.png) 40'460'689'350'266
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX----XOO-------O-------OX----------.png) 55'115'225'702'566
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----XOO-----O-O----OX-------------.png) 16'375'553'186'371
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----XOOO----O------OX-------------.png) 22'035'271'270'560
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----XOOOO---O---X-----------------.png) 46'646'118'973'051
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----XOOO----O-OX------------------.png) 48'015'851'670'170
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----XOOOO---O--X------------------.png) 59'868'010'013'657
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX----XOOO------OX------------------.png) 93'757'776'862'177
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX----XOOO------X-------X-----------.png) 76'591'630'377'375
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--------OXXX----XOOO----X---------------------.png) 48'316'293'952'629
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----XOOO---X-O-------O------------.png) 34'840'780'658'357
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----XOOO---X-O------O-------------.png) 55'614'138'076'000
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----XOOO---XO------O--------------.png) 28'062'957'776'827
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX---OXOOO---XO---------------------.png) 43'733'383'170'037
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX----XOOO---XO---------------------.png) 74'675'735'935'453
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O---O----OXXX----XOO----X----------------------.png) 45'252'205'449'021
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-----------------O--O-----OXXX----XOO----X----------------------.png) 54'752'890'109'744
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX----XOX-------O-------XO----------.png) 16'718'555'942'908
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------------XXX----XXXO----OOO-------------------.png) 87'674'082'244'012
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------OXXX---OXXX---O-O---------------------.png) 10'837'661'968'371
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------------O-OXXX---OXXX-----O---------------------.png) 10'897'808'376'802
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------------O--XXX--XOXXX-----O---------------------.png) 810'969'826'810
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O----XXXX---OOOO----X---------------------.png) 55'642'680'683'593
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O-----XXXX---OOOO----X---------------------.png) 80'789'246'788'848
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOO-X---OOOX------X-------------------.png) 35'808'172'586'842
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------XOOX-----OOO-----OX-------------------.png) 92'830'717'758'819
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOOX----OOOX-------X------------------.png) 118'439'271'889'792
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O----XOOX-----OX------OX-------------------.png) 101'699'169'564'467
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OO----XOOX----OOX------X--------------------.png) 194'406'871'912'785
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------XOX-X---OOOX------X-------------------.png) 16'515'596'954'209
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX----OOO-------OX------------------.png) 85'905'028'974'085
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX----OOO-------XO------------------.png) 60'243'564'062'192
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX----OOOO------X-------------------.png) 118'567'739'728'380
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX----OOO------X-O------------------.png) 58'958'273'212'352
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX----OOOO-----X--------------------.png) 153'946'224'377'147
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX---OOOO-----X---------------------.png) 91'171'786'044'627
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------XOXX-----OO-----XO-O------------------.png) 21'617'455'481'357
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OO------XOXX-----OOX--------X-----------------.png) 43'455'959'370'345
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------XOXX----OOOX-------X------------------.png) 95'177'210'350'363
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX----OOX-----O--X------------------.png) 68'970'306'483'162
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OO----XOXX----OOX--------X------------------.png) 104'790'589'406'888
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O----XOXX----OOX--------X------------------.png) 61'090'619'440'020
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OO-----XOXX-----OX-----O--X------------------.png) 69'828'506'361'112
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX----OOX------OX-------------------.png) 73'700'846'363'446
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------XOXX-----OXO-----OX-------------------.png) 159'046'487'396'063
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----XOXX-----OX------OX-------------------.png) 76'040'082'805'050
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------XOXX-----OXO----XO--------------------.png) 117'344'293'424'283
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----XOXX-----XO-------OX------------------.png) 75'907'023'767'333
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX----OXO-------XO------------------.png) 79'001'349'321'598
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----XOXX-----XO-------XO------------------.png) 54'876'992'643'953
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----XOXX-----XO------X-O------------------.png) 41'273'815'482'606
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX----OXO----OX---------------------.png) 69'764'848'961'788
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------OO------XOXX-----XO-----X--O------------------.png) 36'224'387'387'516
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XOXX----XOO-----XO--------------------.png) 72'397'836'776'221
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------XOXX----XOOO----X---------------------.png) 102'275'266'071'757
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-O----XOXX----XOO----X----------------------.png) 85'514'180'620'384
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OO-----XOXX----XOO----X----------------------.png) 74'842'661'664'503
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--O----XOXX----XOO----X----------------------.png) 73'037'765'015'446
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----XOXX----XOO----X----------------------.png) 72'792'220'358'619
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-O-----XOXX----XXO-----X---------------------.png) 75'502'569'723'962
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------XOXXX----OO------OX-------------------.png) 17'223'208'914'215
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------XOXXX----XO-------XO------------------.png) 19'550'091'808'533
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------XOXXX----XO------OX-------------------.png) 24'385'329'929'437
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------O----XXO-X---OOOX------X-------------------.png) 85'923'875'623'124
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XXOXX----XO------OX-------------------.png) 63'623'091'335'502
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------XXX-X---OOOOO-----X-------------------.png) 34'391'399'163'657
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------O---XXXOX----XO------OX-------------------.png) 14'252'055'735'958
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------XXXX-----OOOO-------X-----------------.png) 65'941'696'012'303
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-------XXXX-----OOOO-------X-----------------.png) 53'790'196'595'322
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------XXXX----OOOOO------X------------------.png) 69'354'405'636'201
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XXXX-----OOO----O--X------------------.png) 55'696'274'902'827
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-----XXXX----OOOO-------X------------------.png) 106'786'478'487'977
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------XXXX-----OOOO------X------------------.png) 110'342'406'387'288
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O------XXXX----OOOO------X-------------------.png) 135'836'098'426'114
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------------XXXXX---OOO------OX-------------------.png) 23'731'075'408'376
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOOO----OX------XX-----X-------------.png) 20'179'500'558'207
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOOO----OX-----XXX-------------------.png) 41'966'461'384'319
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOOO----OXX-----X------X-------------.png) 29'556'226'804'138
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOOO----XX-----XXX-------------------.png) 19'779'221'354'135
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOOO---XXX------OX-------------------.png) 63'592'482'963'582
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOOO---XXX-----O-X-------------------.png) 34'015'871'251'136
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----OO------XO-----X-O-----------.png) 10'973'282'335'123
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----OO------XXO----X-------------.png) 12'082'177'635'579
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----OOO-----XX-----X-------------.png) 25'560'159'621'805
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----OO-----XXO-------O-----------.png) 27'083'439'224'657
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----OO-----XXXO------------------.png) 23'447'051'930'187
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----OOO----XXX-------------------.png) 48'426'290'349'687
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----OX------XO-----X--O----------.png) 16'897'841'576'672
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O--X----OOXO----OX-----XO--------------------.png) 49'379'383'890'192
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----OX-----XOX------O------------.png) 54'484'700'785'274
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----OX-----XXO--------O----------.png) 35'184'104'826'520
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O--X----OOXO----XO-----X--O------------------.png) 23'303'040'863'129
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O--X----OOXO----XO-----X-O-------------------.png) 39'524'059'119'362
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----XO-----XXO-------O-----------.png) 40'001'748'622'198
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX-----XO-----XXXO------------------.png) 30'659'211'300'467
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------OOOX----OOX-----XX-----X---------------------.png) 30'004'642'851'449
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------O-----OO-X----OOX-----XX-----X---------------------.png) 31'602'990'149'672
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O------OO-X----OOX-----XX-----X---------------------.png) 19'348'245'920'691
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX----XOX-----OOX-------------------.png) 38'138'429'452'458
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X----OOX----XXO-----O-XO------------------.png) 60'494'466'381'992
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------O-------OOX----XX-O----XX-----X---------------------.png) 4'007'877'640'521
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O---X---XOOOO----XX-------X-------------------.png) 33'098'502'709'667
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O---X---XOOX-----OX------OX-------------------.png) 38'897'388'442'381
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O---X---XOOX-----OX-----O-X-------------------.png) 13'626'983'874'084
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O---X---XOOX-----XO-------XO------------------.png) 46'701'601'043'025
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O--X---XOXX-----OX------OX-------------------.png) 38'569'240'248'480
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O---X---XOXX-----XO-------XO------------------.png) 22'162'556'077'139
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------OX---XXOX-----OX-----O-X-------------------.png) 13'153'475'939'719
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------O-X---XXOX-----XO-------XO------------------.png) 47'612'283'610'856
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/----------------------X---XXXX----OOO-------XO------------------.png) 18'382'734'962'319
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO-----XO-----XO-------O------------.png) 37'560'847'243'061
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO-----XO-----XXO-------------------.png) 50'626'148'346'431
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX-----OO-----OXO-----XXO-------------------.png) 127'501'220'630'228
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX----OOO------XO-----XXO-------------------.png) 59'234'138'295'090
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX-----OOO-----XO-----XXX-------------------.png) 36'211'187'305'840
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X-----OOOO----XOX----XO--------------------.png) 41'497'342'456'016
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X-----OOOO----XXO----X---------------------.png) 48'410'190'402'393
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----OXX-----X------X--------------.png) 44'878'200'393'594
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO-----XX-----XXO-------------------.png) 79'462'690'164'723
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO-----XX----XXX--------------------.png) 28'466'985'531'439
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X-----OO------XXO---XXX--------------------.png) 13'304'443'495'886
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X-----OOO-----XX----XXX--------------------.png) 25'736'669'040'956
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X-----OOOO----XXX----XO--------------------.png) 78'584'416'412'035
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----XOX-------OX------------------.png) 96'826'705'867'980
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX----OOO-----XOX-------OX------------------.png) 78'281'019'806'103
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----XOX-------X-------X-----------.png) 51'666'803'748'302
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----XOX------X--------X-----------.png) 49'974'380'402'229
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----XOX------X------X-------------.png) 51'691'339'013'049
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX-----OOO----XXO------OX-------------------.png) 127'735'005'564'863
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----XXO-------X--------X----------.png) 31'693'651'322'094
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX----OOO-----XXO-------X--------X----------.png) 33'063'191'846'123
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X-----OOO----XXO-------X--------X----------.png) 14'501'451'284'797
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-OX-----OO-----XXO-------X--------X----------.png) 12'907'662'299'141
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----XXO------XO-------------------.png) 111'069'873'497'941
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----XXX-------XO------------------.png) 87'767'966'894'504
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X-----OOO----XXX-------X-------X-----------.png) 18'228'815'552'877
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----XXX------XO-------------------.png) 106'365'710'851'698
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----XXX-----X-O-------------------.png) 66'916'255'549'839
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOOO----XXX-----X-------X-------------.png) 31'527'789'479'136
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X-----OO-----XXXO----X-------X-------------.png) 9'384'911'894'870
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X-----OOO----XXX-----X-------X-------------.png) 20'357'691'519'283
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX-----OOX-----XOX----XO--------------------.png) 49'341'223'640'844
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----OOOO----X------X--------------.png) 14'053'189'205'476
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----OOX-----X-O----X--------------.png) 11'244'476'259'787
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----OOX-----XO-----X--------------.png) 24'641'447'117'360
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX------OX----XXO-------O------------.png) 23'943'227'578'099
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X-----OX------OX----XXO-------O------------.png) 20'882'167'559'380
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX------OX----XXXO-------------------.png) 28'373'136'188'075
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX------XO-----XO-O-----O------------.png) 23'923'512'889'219
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----OXO-----X--O---X--------------.png) 19'370'609'944'805
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X-----OXO-----XO-----XOX-----O-------------.png) 34'463'397'669'576
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X-----OXO-----XO-----XXO-------O-----------.png) 55'415'798'173'392
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX------XO-----XXOO------------------.png) 47'119'226'141'378
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X-----OX-----OXO-----XXO-------------------.png) 76'965'616'340'122
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X----OOX------XO-----XXO-------------------.png) 50'033'783'824'233
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X-----OXO-----XO-----XXXO------------------.png) 31'724'196'682'716
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX------XO----XXX-O------------------.png) 13'123'109'309'180
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X-----OX------XO----XXX-O------------------.png) 11'943'027'456'789
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X-----OX------XO----XXXO-------------------.png) 22'522'431'508'163
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X-----OX------XOO---XXX--------------------.png) 18'230'446'187'846
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----OXX-----O------XO-------------.png) 20'160'175'168'913
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----OXX----OX-O-------------------.png) 42'011'158'042'394
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X---OOOX-----OXX-----XO--------------------.png) 50'651'719'462'454
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----OXX----OX-------X-------------.png) 22'770'896'237'992
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX-----OX----OOXX-----X-------X-------------.png) 15'059'862'409'077
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X-----OX-----OXX----OX-------X-------------.png) 19'794'245'628'401
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOO------OX--------X----------.png) 52'977'491'824'281
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X-----OX-----XOO------OX--------X----------.png) 26'081'511'208'340
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOO-------XO------X-----------.png) 60'741'956'115'114
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOOO------X-------X-----------.png) 47'924'706'200'276
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOO------X-O------X-----------.png) 86'228'115'506'854
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOOO-----X--------X-----------.png) 79'815'272'989'686
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOO------X-O----X-------------.png) 59'359'928'267'078
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOOO-----X------X-------------.png) 88'073'240'366'046
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOX-------O-------XO----------.png) 19'985'674'319'064
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOX------O-------OX-----------.png) 25'632'713'956'084
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOX------O------XO------------.png) 26'995'824'710'174
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X----OOX-----XOX-------OX------------------.png) 70'134'143'977'188
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X----OOX-----XOX-------X-------X-----------.png) 29'292'164'126'990
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X-----OX-----XOX------OX-------X-----------.png) 20'208'306'795'584
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOX-----XOO-------------------.png) 61'922'296'900'328
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOX-----X-O-----X-------------.png) 12'292'281'273'727
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XOX-----XO------X-------------.png) 26'637'618'663'583
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/-------------------O-X-----OX-----XOX-----XO------X-------------.png) 42'715'822'975'701
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XXO-------O-------OX----------.png) 35'407'672'743'305
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X-----OX-----XXO-------O-------OX----------.png) 16'717'090'015'495
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X-----OX-----XXO-------XO------X-----------.png) 17'106'668'729'725
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OOX-----XXO------XOO------------------.png) 112'322'625'611'532
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX----OXO-----XOO-------OX------------------.png) 116'731'277'543'662
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX-----XO-----XOO-----O-X--------X----------.png) 64'633'088'316'924
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX-----XO-----XOX-----O-OX------------------.png) 58'559'947'131'570
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX-----XO-----XXO-------O-------OX----------.png) 37'680'685'026'367
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OXX-----XOO-------O-------OX----------.png) 54'224'088'124'640
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OXX-----XOOO------OX------------------.png) 111'684'320'674'700
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OXX-----XOOO------X-------X-----------.png) 62'453'395'027'582
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/---------------------X----OXX-----XOX-------O-------XO----------.png) 17'123'180'657'992
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX----XOOO----OXX-------X-------------------.png) 119'390'335'044'597
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-OX----XOOO-----XX-------X-------------------.png) 75'150'493'705'363
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX----XOX-----OOO-------XO------------------.png) 32'924'738'562'260
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX----XOX-----OOOO------X-------------------.png) 46'175'706'438'263
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX----XOX-----OOX------OX-------------------.png) 68'553'566'321'822
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O-OX----XOX------OX------OX-------------------.png) 76'814'130'792'745
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/--------------------OX----XOX-----OXO-------XO------------------.png) 42'114'043'559'862
+
+![Image](https://raw.githubusercontent.com/PanicSheep/ReversiPerftCUDA/master/docs/ply6/------------------O--X----XOXO-----XO-------XO------------------.png) 28'419'578'377'931
