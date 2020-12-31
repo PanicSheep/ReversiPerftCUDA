@@ -30,7 +30,7 @@ struct PositionDepthPair
 	Position pos{};
 	int depth = -1;
 
-	auto operator<=>(const PositionDepthPair&) const noexcept = default;
+	[[nodiscard]] constexpr auto operator<=>(const PositionDepthPair&) const noexcept = default;
 };
 
 class BigNode

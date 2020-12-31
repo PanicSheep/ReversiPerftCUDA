@@ -30,9 +30,9 @@ public:
 	}
 
 	//[[nodiscard]] constexpr auto operator<=>(const Position&) const noexcept = default;
-	[[nodiscard]] constexpr bool operator==(const Position& o) const noexcept { return P == o.P && O == o.O; }
-	[[nodiscard]] constexpr bool operator!=(const Position& o) const noexcept { return P != o.P || O != o.O; }
-	[[nodiscard]] constexpr bool operator<(const Position& o) const noexcept { return std::tie(P, O) < std::tie(o.P, o.O); }
+	[[nodiscard]] CUDA_CALLABLE constexpr bool operator==(const Position& o) const noexcept { return P == o.P && O == o.O; }
+	[[nodiscard]] CUDA_CALLABLE constexpr bool operator!=(const Position& o) const noexcept { return P != o.P || O != o.O; }
+	[[nodiscard]] CUDA_CALLABLE constexpr bool operator<(const Position& o) const noexcept { return std::tie(P, O) < std::tie(o.P, o.O); }
 
 	[[nodiscard]] CUDA_CALLABLE BitBoard Player() const noexcept { return P; }
 	[[nodiscard]] CUDA_CALLABLE BitBoard Opponent() const noexcept { return O; }

@@ -21,7 +21,7 @@ public:
 	constexpr Moves() noexcept = default;
 	CUDA_CALLABLE constexpr Moves(BitBoard moves) noexcept : b(moves) {}
 
-	//[[nodiscard]] auto operator<=>(const Moves&) const noexcept = default;
+	//[[nodiscard]] CUDA_CALLABLE constexpr auto operator<=>(const Moves&) const noexcept = default;
 	[[nodiscard]] CUDA_CALLABLE bool operator==(const Moves& o) const noexcept { return b == o.b; }
 	[[nodiscard]] CUDA_CALLABLE bool operator!=(const Moves& o) const noexcept { return b != o.b; }
 
