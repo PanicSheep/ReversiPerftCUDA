@@ -10,6 +10,7 @@
 #include <iostream>
 #include <iomanip>
 #include <random>
+#include <map>
 
 void PrintHelp()
 {
@@ -144,10 +145,14 @@ int main(int argc, char* argv[])
 		WriteToFile(file, work);
 	}
 
+	std::map<Position, uint64> value;
+	for (const auto& w : work)
+		value[w.pos] = w.value;
+
 	// calculate final result
 	uint64 sum = 0;
 	for (const auto& pos : Children(Position::Start(), file_depth, true))
-		sum += std::lower_bound(work.begin(), work.end(), FlipToUnique(pos), [](const PosResDur& o, const Position& pos){ return o.pos < pos; })->value;
+		sum += value[FlipToUnique(pos)];
 	std::cout << "Sum: " << sum << std::endl;
 	std::cout << "Duration: " << total_duration << std::endl;
 
