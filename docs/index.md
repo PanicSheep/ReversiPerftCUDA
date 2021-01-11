@@ -13,6 +13,8 @@ The symmetry group of a Reversi board is [Dih4](https://en.wikipedia.org/wiki/Di
 
 At the end of the 6-th ply there are 8'200 possible Reversi games. Using the transformations from [Dih4](https://en.wikipedia.org/wiki/Dihedral_group) the 8'200 positions can be reduced to a set of 1'773 unique positions. We can now calculate how many games each unique position has at the end of its 14-th ply and associate it with the position. Then we can go through the original 8'200 positions and find their symmetric partner in the unique ones and add the associated numbers up to arrive at A124004(n=20).
 
+The intermediate results listed below can be verified with the code in this project via ```PerftCuda.exe -f perft20_ply6.pos -fd 20 -d 6 -t 1000 1101``` which verifies the positions 1000 to 1100. Additional info is provided with ```-h```. With ```-cuda``` this program makes use of cuda capable accelerators. It took two nVidia GeForce GTX 1080 Ti's with SLI and a Intel Core i9-9900K about 70 hours to calculate all positions. So one position took on average 143 s.
+
 All the 1'773 unique positions after the 6-th ply with an arbitrary enumeration:
 
 | # | Position | Number of possible games at the end of its 14-th ply |
