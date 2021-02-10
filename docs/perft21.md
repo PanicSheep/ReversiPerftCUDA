@@ -16,8 +16,13 @@ At the end of the 7-th ply there are 55'092 possible Reversi games. Using the tr
 The intermediate results listed below can be verified with the code in this project via ```PerftCuda.exe -f perft21_ply7.pos -fd 21 -d 7 -t 1000 1101``` which verifies the positions 1000 to 1100. Additional info is provided with ```-h```. With ```-cuda``` this program makes use of cuda capable accelerators. It took two nVidia GeForce GTX 1080 Ti's with SLI and a Intel Core i9-9900K about 1'000 hours to calculate all positions. So one position took on average 338 s.
 
 All the 10'649 unique positions after the 7-th ply with an arbitrary enumeration are split into these pages:
-[0-1'999](https://en.wikipedia.org/wiki/perft21_page1.md)
-[2'000-3'999](https://en.wikipedia.org/wiki/perft21_page2.md)
-[4'000-5'999](https://en.wikipedia.org/wiki/perft21_page3.md)
-[6'000-7'999](https://en.wikipedia.org/wiki/perft21_page4.md)
-[8'000-10'648](https://en.wikipedia.org/wiki/perft21_page5.md)
+
+[0-1'999](https://github.com/PanicSheep/ReversiPerftCUDA/blob/master/docs/perft21_page1.md)
+
+[2'000-3'999](https://github.com/PanicSheep/ReversiPerftCUDA/blob/master/docs/perft21_page2.md)
+
+[4'000-5'999](https://github.com/PanicSheep/ReversiPerftCUDA/blob/master/docs/perft21_page3.md)
+
+[6'000-7'999](https://github.com/PanicSheep/ReversiPerftCUDA/blob/master/docs/perft21_page4.md)
+
+[8'000-10'648](https://github.com/PanicSheep/ReversiPerftCUDA/blob/master/docs/perft21_page5.md)
