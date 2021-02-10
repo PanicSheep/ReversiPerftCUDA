@@ -16,27 +16,27 @@ std::wstring DoubleDigitSignedInt(const Score score)
 	return sign + filling_zero + number;
 }
 
-wchar_t MetricPrefix(int magnitude_base_1000) noexcept(false)
+std::wstring MetricPrefix(int magnitude_base_1000) noexcept(false)
 {
 	switch (magnitude_base_1000)
 	{
-		case -8: return L'y';
-		case -7: return L'z';
-		case -6: return L'a';
-		case -5: return L'f';
-		case -4: return L'p';
-		case -3: return L'n';
-		case -2: return L'u';
-		case -1: return L'm';
-		case  0: return L'\0';
-		case +1: return L'k';
-		case +2: return L'M';
-		case +3: return L'G';
-		case +4: return L'T';
-		case +5: return L'P';
-		case +6: return L'E';
-		case +7: return L'Z';
-		case +8: return L'Y';
+		case -8: return L"y";
+		case -7: return L"z";
+		case -6: return L"a";
+		case -5: return L"f";
+		case -4: return L"p";
+		case -3: return L"n";
+		case -2: return L"u";
+		case -1: return L"m";
+		case  0: return L"";
+		case +1: return L"k";
+		case +2: return L"M";
+		case +3: return L"G";
+		case +4: return L"T";
+		case +5: return L"P";
+		case +6: return L"E";
+		case +7: return L"Z";
+		case +8: return L"Y";
 		default: throw;
 	}
 }

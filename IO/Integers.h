@@ -9,7 +9,7 @@ std::wstring SignedInt(Score);
 std::wstring DoubleDigitSignedInt(Score);
 
 // Maps input to (..,'n', 'u', 'm', '', 'k', 'M', 'G',..)
-wchar_t MetricPrefix(int magnitude_base_1000) noexcept(false);
+std::wstring MetricPrefix(int magnitude_base_1000) noexcept(false);
 
 constexpr int64 operator""_kB(uint64 v) noexcept { return v * 1024; }
 constexpr int64 operator""_MB(uint64 v) noexcept { return v * 1024 * 1024; }
